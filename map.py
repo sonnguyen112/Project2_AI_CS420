@@ -1,2 +1,2 @@
-class TreasureIslandGame():
+class Map():
     pass
