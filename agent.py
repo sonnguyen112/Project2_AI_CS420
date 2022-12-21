@@ -12,11 +12,12 @@ class Agent():
         return self.__pos
 
     def check_hint(hint):
-        pass
+        # Add code 
+        return True
 
     def is_win(self): # Use to check whether agent win
         return self.__is_win
 
     def action(self, hint):
         # Add code to agent choose action
-        pass
+        return ["The agent moves 2 steps to the north and SMALL SCAN", "The agent moves 4 steps to the north and SMALL SCAN"]

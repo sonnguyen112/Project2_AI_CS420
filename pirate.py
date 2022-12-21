@@ -36,10 +36,14 @@ class Pirate():
 
     def action(self, turn):
         # Add code for pirate do action 
-        pass
+        return "The pirate moves 2 steps to the north and SMALL SCAN"
 
     def hint_1(self):
-        pass
+        # Add code
+        return {
+            "val" : [],
+            "description" : "The agent receives the first hint: “Region number 2 does not has treasure"
+        }
 
     def hint_2(self):
         pass

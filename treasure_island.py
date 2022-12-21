@@ -13,6 +13,9 @@ class TreasureIslandGame():
         while self.__agent.is_win() == False and self.__pirate.is_win() == False:
             print("Turn",self.__turn)
             hint = self.__pirate.give_hint(self.__turn)
-            agent_actions = self.__agent.action(hint)
+            print("HINT", hint["description"])
+            agent_actions = self.__agent.action(hint["val"])
+            print("AGENT ACTION", agent_actions)
             pirate_action = self.__pirate.action(self.__turn)
+            print("PIRATE ACTION", pirate_action)
             self.__turn += 1
