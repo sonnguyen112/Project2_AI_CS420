@@ -1,11 +1,11 @@
 import random
 
 class Pirate():
-    def __init__(self):
+    def __init__(self, turn_reveal, turn_free):
         self.__is_win = False
         self.pos = self.__set_init_pos()
-        self.__turn_reveal = random.randint(2, 4)
-        self.__turn_free = self.__set_turn_free()
+        self.__turn_reveal = turn_reveal
+        self.__turn_free = turn_free
         self.__hint_dict = {
             1: self.hint_1(),
             2: self.hint_2(),
@@ -16,10 +16,6 @@ class Pirate():
     def __set_init_pos(self):
         # Add code
         return (0,0)
-
-    def __set_turn_free(self):
-        # Add code
-        return 5
 
     def get_turn_reveal(self):
         return self.__turn_reveal
