@@ -37,6 +37,7 @@ class Pirate():
     def hint_1(self):
         # Add code
         return {
+            "id": 1,
             "val" : [],
             "description" : "The agent receives the first hint: “Region number 2 does not has treasure"
         }
