@@ -16,6 +16,9 @@ class Pirate():
     def __set_init_pos(self):
         # Add code
         return (0,0)
+        
+    def get_pos(self):
+        return self.__pos
 
     def get_turn_reveal(self):
         return self.__turn_reveal
