@@ -36,6 +36,16 @@ class VisualizationTool():
     def __close_win(self, e):
         self.__root.destroy()
 
+    def __click_left(self, e):
+        if self.__turn > 1:
+            self.__turn -= 1
+            print(self.__turn)
+
+    def __click_right(self, e):
+        if self.__turn < len(self.__log["machine_turn"]):
+            self.__turn += 1
+            print(self.__turn)
+
     def visualize(self):
         self.__turn = 1
         self.__map_frame.grid(row=0, column=0)
@@ -90,6 +100,8 @@ The pirate is free at the beginning of the {self.__log["turn_pirate_free"]}th tu
         self.__log_text.configure(state="disable")
 
         self.__root.bind('<Escape>', lambda e: self.__close_win(e))
+        self.__root.bind('<Left>', lambda e: self.__click_left(e))
+        self.__root.bind('<Right>', lambda e: self.__click_right(e))
         self.__root.mainloop()
 
 

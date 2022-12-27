@@ -10,6 +10,7 @@ log = {
     "treasure_pos": (10, 10),
     "turn_pirate_reveal": 3,
     "turn_pirate_free": 5,
+    "who_win": "agent",
     "machine_turn": [
         {
             "agent_pos": (0, 0),
