@@ -95,6 +95,6 @@ class MapGenerateTool():
         map = Map(map)
         return map
 
-map_generate = MapGenerateTool()
-print(map_generate.generate_map(16, 7))
-print(map_generate.generate_map(16, 7).get_map())
+# map_generate = MapGenerateTool()
+# print(map_generate.generate_map(16, 7))
+# print(map_generate.generate_map(16, 7).get_map())
