@@ -176,7 +176,7 @@ class Agent():
             return True
         return False
 
-    def determine_treasure_location_normal(self, hint, game_map,num_action_rest):
+    def determine_treasure_location_normal(self, hint, game_map, num_action_rest):
         if hint["id"] == 1:
             obtain_list = []
             for i in range(len(game_map)-1):
@@ -185,7 +185,7 @@ class Agent():
                         obtain_list.append((i, j))
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.check_hint(hint, game_map):
-                    num_action_rest=num_action_rest-1
+                    num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
                         *map(set, self.__hint_list_true))
@@ -197,7 +197,7 @@ class Agent():
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.check_hint(hint, game_map):
-                    num_action_rest=num_action_rest-1
+                    num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
                         *map(set, self.__hint_list_true))
@@ -209,7 +209,7 @@ class Agent():
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.check_hint(hint, game_map):
-                    num_action_rest=num_action_rest-1
+                    num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
                         *map(set, self.__hint_list_true))
@@ -224,7 +224,7 @@ class Agent():
                         obtain_list.append((i, j))
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.check_hint(hint, game_map):
-                    num_action_rest=num_action_rest-1
+                    num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
                         *map(set, self.__hint_list_true))
@@ -236,7 +236,7 @@ class Agent():
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.check_hint(hint, game_map):
-                    num_action_rest=num_action_rest-1
+                    num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
                         *map(set, self.__hint_list_true))
@@ -251,7 +251,7 @@ class Agent():
                         obtain_list.append((i, j))
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.check_hint(hint, game_map):
-                    num_action_rest=num_action_rest-1
+                    num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
                         *map(set, self.__hint_list_true))
@@ -269,12 +269,13 @@ class Agent():
                     if math.sqrt((i[0]-self.__pos[0])**2 + (i[1]-self.__pos[1])**2) < math.sqrt(((i[0]-self.__pirate_pos[0])**2 + (i[1]-self.__pirate_pos[1])**2)):
                         obtain_list.remove(i)
             if self.is_change_virtual_treasure(obtain_list) == True:
-                 if self.check_hint(hint, game_map):
-                    num_action_rest=num_action_rest-1
+                if self.check_hint(hint, game_map):
+                    num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
                         *map(set, self.__hint_list_true))
-                    self.__virtual_treasure = random.choice(self.__hint_list_true)
+                    self.__virtual_treasure = random.choice(
+                        self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 8:
             if "row" not in hint["val"] or "col" not in hint["val"]:
@@ -285,11 +286,12 @@ class Agent():
                             valid_list.append((hint["val"]["row"], i))
                     if self.is_change_virtual_treasure(valid_list) == True:
                         if self.check_hint(hint, game_map):
-                            num_action_rest=num_action_rest-1
+                            num_action_rest = num_action_rest-1
                             self.__hint_list_true.append(valid_list)
                             self.__hint_list_true = set.intersection(
-                            *map(set, self.__hint_list_true))
-                            self.__virtual_treasure = random.choice(self.__hint_list_true)
+                                *map(set, self.__hint_list_true))
+                            self.__virtual_treasure = random.choice(
+                                self.__hint_list_true)
                     return self.__virtual_treasure
                 else:
                     valid_list = []
@@ -298,17 +300,20 @@ class Agent():
                             valid_list.append((i, hint["val"]["col"]))
                     if self.is_change_virtual_treasure(valid_list) == True:
                         if self.check_hint(hint, game_map):
-                            num_action_rest=num_action_rest-1
+                            num_action_rest = num_action_rest-1
                             self.__hint_list_true.append(valid_list)
                             self.__hint_list_true = set.intersection(
-                            *map(set, self.__hint_list_true))
-                            self.__virtual_treasure = random.choice(self.__hint_list_true)
+                                *map(set, self.__hint_list_true))
+                            self.__virtual_treasure = random.choice(
+                                self.__hint_list_true)
                     return self.__virtual_treasure
             else:
                 if self.check_hint(hint, game_map):
-                    num_action_rest=num_action_rest-1
-                    self.__hint_list_true = [(hint["val"]["row"], hint["val"]["col"])]
-                    self.__virtual_treasure = (hint["val"]["row"], hint["val"]["col"])
+                    num_action_rest = num_action_rest-1
+                    self.__hint_list_true = [
+                        (hint["val"]["row"], hint["val"]["col"])]
+                    self.__virtual_treasure = (
+                        hint["val"]["row"], hint["val"]["col"])
                 return self.__virtual_treasure
         if hint["id"] == 9:
             obtain_list = []
@@ -329,45 +334,49 @@ class Agent():
                         if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P' and i != hint["val"]["row"] and j != hint["val"]["col"]):
                             obtain_list.append((i, j))
             if self.is_change_virtual_treasure(obtain_list) == True:
-                        if self.check_hint(hint, game_map):
-                            num_action_rest=num_action_rest-1
-                            self.__hint_list_true.append(obtain_list)
-                            self.__hint_list_true = set.intersection(
-                            *map(set, self.__hint_list_true))
-                            self.__virtual_treasure = random.choice(self.__hint_list_true)
+                if self.check_hint(hint, game_map):
+                    num_action_rest = num_action_rest-1
+                    self.__hint_list_true.append(obtain_list)
+                    self.__hint_list_true = set.intersection(
+                        *map(set, self.__hint_list_true))
+                    self.__virtual_treasure = random.choice(
+                        self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 10:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
-                        if self.check_hint(hint, game_map):
-                            num_action_rest=num_action_rest-1
-                            self.__hint_list_true.append(obtain_list)
-                            self.__hint_list_true = set.intersection(
-                            *map(set, self.__hint_list_true))
-                            self.__virtual_treasure = random.choice(self.__hint_list_true)
+                if self.check_hint(hint, game_map):
+                    num_action_rest = num_action_rest-1
+                    self.__hint_list_true.append(obtain_list)
+                    self.__hint_list_true = set.intersection(
+                        *map(set, self.__hint_list_true))
+                    self.__virtual_treasure = random.choice(
+                        self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 11:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
-                        if self.check_hint(hint, game_map):
-                            num_action_rest=num_action_rest-1
-                            self.__hint_list_true.append(obtain_list)
-                            self.__hint_list_true = set.intersection(
-                            *map(set, self.__hint_list_true))
-                            self.__virtual_treasure = random.choice(self.__hint_list_true)
+                if self.check_hint(hint, game_map):
+                    num_action_rest = num_action_rest-1
+                    self.__hint_list_true.append(obtain_list)
+                    self.__hint_list_true = set.intersection(
+                        *map(set, self.__hint_list_true))
+                    self.__virtual_treasure = random.choice(
+                        self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 12:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
-                        if self.check_hint(hint, game_map):
-                            num_action_rest=num_action_rest-1
-                            self.__hint_list_true.append(obtain_list)
-                            self.__hint_list_true = set.intersection(
-                            *map(set, self.__hint_list_true))
-                            self.__virtual_treasure = random.choice(self.__hint_list_true)
+                if self.check_hint(hint, game_map):
+                    num_action_rest = num_action_rest-1
+                    self.__hint_list_true.append(obtain_list)
+                    self.__hint_list_true = set.intersection(
+                        *map(set, self.__hint_list_true))
+                    self.__virtual_treasure = random.choice(
+                        self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 13:
             obtain_list = []
@@ -376,34 +385,37 @@ class Agent():
                     if (game_map[i][j] not in hint['val'] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
                         obtain_list.append((i, j))
             if self.is_change_virtual_treasure(obtain_list) == True:
-                        if self.check_hint(hint, game_map):
-                            num_action_rest=num_action_rest-1
-                            self.__hint_list_true.append(obtain_list)
-                            self.__hint_list_true = set.intersection(
-                            *map(set, self.__hint_list_true))
-                            self.__virtual_treasure = random.choice(self.__hint_list_true)
+                if self.check_hint(hint, game_map):
+                    num_action_rest = num_action_rest-1
+                    self.__hint_list_true.append(obtain_list)
+                    self.__hint_list_true = set.intersection(
+                        *map(set, self.__hint_list_true))
+                    self.__virtual_treasure = random.choice(
+                        self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 14:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
-                        if self.check_hint(hint, game_map):
-                            num_action_rest=num_action_rest-1
-                            self.__hint_list_true.append(obtain_list)
-                            self.__hint_list_true = set.intersection(
-                            *map(set, self.__hint_list_true))
-                            self.__virtual_treasure = random.choice(self.__hint_list_true)
+                if self.check_hint(hint, game_map):
+                    num_action_rest = num_action_rest-1
+                    self.__hint_list_true.append(obtain_list)
+                    self.__hint_list_true = set.intersection(
+                        *map(set, self.__hint_list_true))
+                    self.__virtual_treasure = random.choice(
+                        self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 15:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
-                        if self.check_hint(hint, game_map):
-                            num_action_rest=num_action_rest-1
-                            self.__hint_list_true.append(obtain_list)
-                            self.__hint_list_true = set.intersection(
-                            *map(set, self.__hint_list_true))
-                            self.__virtual_treasure = random.choice(self.__hint_list_true)
+                if self.check_hint(hint, game_map):
+                    num_action_rest = num_action_rest-1
+                    self.__hint_list_true.append(obtain_list)
+                    self.__hint_list_true = set.intersection(
+                        *map(set, self.__hint_list_true))
+                    self.__virtual_treasure = random.choice(
+                        self.__hint_list_true)
             return self.__virtual_treasure
 
     def teleport(self, hint, map):
@@ -411,20 +423,22 @@ class Agent():
 
     def cal_distance():
         pass
-    def receive_hint(self,hint,map,num_action_rest):
+
+    def receive_hint(self, hint, map, num_action_rest):
         if self.is_first_turn:
             self.__virtual_treasure = self.determine_treasure_location_init(
                 hint, map)
             self.is_first_turn = False
         else:
-            self.determine_treasure_location_normal(hint,map,num_action_rest)
-    def A_start_find_way(self,map):
+            self.determine_treasure_location_normal(hint, map, num_action_rest)
+
+    def A_start_find_way(self, map):
         pass
+
     def action(self, hint, map):
         num_action_rest = 2
-        self.receive_hint(self,hint,map,num_action_rest)
+        self.receive_hint(self, hint, map, num_action_rest)
         self.A_start_find_way(map)
-        
 
         # Add code to agent choose action
         return ["The agent moves 2 steps to the north and SMALL SCAN", "The agent moves 4 steps to the north and SMALL SCAN"]
