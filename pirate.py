@@ -7,9 +7,11 @@ class Pirate():
         self.pos = self.__set_init_pos()
         self.__turn_reveal = turn_reveal
         self.__turn_free = turn_free
-
-        self.__regions = 5
-        self.__size = 10
+        self.__treasure = (3,3)
+        self.__treasureRegion = 2
+        self.__regions = 7
+        self.__size = 16
+        self.__map = [['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'], ['0', '1M', '1M', '1M', '1', '1', '1', '0', '0', '4', '4', '4', '4', '4', '4', '0'], ['0', '1M', '1M', '1M', '1M', '1', '1', '5', '4', '4', '4', '4', '4', '4', '4', '0'], ['0', '1M', '1M', '1M', '1', '1', '1', '5', '5', '4', '4', '4', '4', '4', '4', '0'], ['0', '1M', '1M', '1', '1', '1', '1', '5', '5', '5', '4', '4', '4', '4', '4', '0'], ['0', '2', '1M', '2', '1', '1', '5', '5', '5', '5', '4', '4', '4', '0', '0', '0'], ['0', '2', '2', '2', '2', '1', '5', '5', '5M', '5', '5', '4', '6', '0', '0', '0'], ['0', '2', '2', '2', '2', '2', '2', '5M', '5M', '5M', '5', '6', '6', '6P', '6', '0'], ['0', '2', '2', '2', '2', '2', '2', '5M', '5M', '5M', '5', '6', '6', '6', '6', '0'], ['0', '2', '2P', '2', '2', '2', '5', '5M', '5M', '5M', '6', '6', '6', '6', '6', '0'], ['0', '2', '2', '2', '0', '2', '5', '3', '0', '6', '6', '6', '6', '6', '6', '0'], ['0', '2', '2', '3', '3', '3', '3', '3', '3', '0', '6', '6', '6', '6', '6', '0'], ['0', '3', '3', '3', '3', '3', '3', '3', '3', '0', '0', '6', '6', '6', '6', '0'], ['0', '3', '3', '3P', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0'], ['0', '3', '3', '3', '3', '3', '3', '3', '3', '0', '0', '0', '0', '0', '0', '0'], ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']]
         self.__hint_dict = {
             1: self.hint_1(),
             2: self.hint_2(),
@@ -58,9 +60,9 @@ class Pirate():
         list_tile = []
         n = random.randint(0, self.__size)
         m = random.randint(0, self.__size)
-        size = random.randint(1, 12)
-        while ((n, m) not in list_tile and len(list_tile) < size):
-            list_tile.append((n, m))
+        size = random.randint(1,12)
+        while ( (n,m) not in list_tile and len(list_tile) < size and (n,m) != self.__treasure):
+            list_tile.append((n,m))
             n = random.randint(0, self.__size)
             m = random.randint(0, self.__size)
         return {
@@ -72,50 +74,74 @@ class Pirate():
     def hint_2(self):
         n = random.randint(2, 5)
         list_re = []
-        m = random.randint(1, self.__regions)
-        while (len(list_re) < n and m not in list_re):
+        list_re.append(self.__treasureRegion)
+        tiles = []
+        m = random.randint(1,self.__regions)
+        while( len(list_re) < n and m not in list_re):
             list_re.append(m)
             m = random.randint(0, self.__regions)
+        for re in list_re:
+            for x in range(self.__size):
+                for y in range(self.__size):
+                    if str(re) in map[x][y]:
+                        tiles.append((x,y))
         return {
             "id": 2,
-            "val": list_re,
-            "description": "Regions that 1 of them has the treasure:"
+            "val" : tiles,
+            "description" : "Regions that 1 of them has the treasure:"
         }
 
     def hint_3(self):
         n = random.randint(1, 3)
         list_re = []
-        m = random.randint(1, self.__regions)
-        while (len(list_re) < n and m not in list_re):
+        tiles = []
+        m = random.randint(1,self.__regions)
+        while( len(list_re) < n and m not in list_re and m != self.__treasureRegion):
             list_re.append(m)
             m = random.randint(0, self.__regions)
+        for re in list_re:
+            for x in range(self.__size):
+                for y in range(self.__size):
+                    if str(re) in map[x][y]:
+                        tiles.append((x,y))
         return {
             "id": 3,
-            "val": list_re,
-            "description": "Regions that do not contain the treasure:"
+            "val" : tiles,
+            "description" : "Regions that do not contain the treasure:"
         }
 
     def hint_4(self):
-        n1 = random.randint(0, self._size // 4) - 1
-        n2 = random.randint(0, self._size // 4) - 1
-        m1 = random.randint(self.__size*3 // 4, self.__size) - 1
-        m2 = random.randint(self.__size*3 // 4, self.__size) - 1
+        n1 = random.randint(0, self._size // 4) -1
+        n2 = random.randint(0, self._size // 4) -1 
+        m1 = random.randint(self.__size*3 // 4, self.__size) -1
+        m2 = random.randint(self.__size*3 // 4, self.__size) -1
+        tiles = []
+        for x in range(n1,m1+1):
+            for y in range(n2,m2+1):
+                tiles.append((x,y))
         return {
             "id": 4,
-            "val": [(n1, n2, m1, m2)],
-            "description": "A large rectangle area that has the treasure:"
+            "val" : tiles,
+            "description" : "A large rectangle area that has the treasure:"
         }
 
     def hint_5(self):
-        # Add code
+        n1 = random.randint(self._size // 4,self._size // 2) -1
+        n2 = random.randint(self._size // 4,self._size // 2) -1 
+        m1 = random.randint(self._size // 2,self.__size*3 // 4) -1
+        m2 = random.randint(self._size // 2,self.__size*3 // 4) -1
+        tiles = []
+        for x in range(n1,m1+1):
+            for y in range(n2,m2+1):
+                tiles.append((x,y))
         return {
             "id": 5,
-            "val": [],
-            "description": "The agent receives the first hint: “Region number 2 does not has treasure"
+            "val" : tiles,
+            "description" : "The agent receives the first hint: “Region number 2 does not has treasure"
         }
 
     def hint_6(self):
-        # Add code
+
         return {
             "id": 6,
             "val": [],
@@ -124,20 +150,63 @@ class Pirate():
 
     def hint_7(self):
         # Add code
-        return {
-            "id": 7,
-            "val": [],
-            "description": "The agent receives the first hint: “Region number 2 does not has treasure"
-        }
-
+        a = random.randint(0,3)
+        n = random.randint(0,self.__size)
+        m = random.randint(0,self.__size)
+        if ( a == 0):
+            return {
+                "id": 7,
+                "val" : {
+                    "col": n,
+                    "row" : m
+                },
+                "description" : "The agent receives the first hint: “Region number 2 does not has treasure"
+            }
+        if ( a == 1):
+            return {
+                "id": 7,
+                "val" : {
+                    "col": n,
+                },
+                "description" : "The agent receives the first hint: “Region number 2 does not has treasure"
+            }
+        if ( a == 2):
+            return {
+                "id": 7,
+                "val" : {
+                    "row" : m
+                },
+                "description" : "The agent receives the first hint: “Region number 2 does not has treasure"
+            }
     def hint_8(self):
-        # Add code
-        return {
-            "id": 8,
-            "val": [],
-            "description": "The agent receives the first hint: “Region number 2 does not has treasure"
-        }
-
+        a = random.randint(0,3)
+        n = random.randint(0,self.__size)
+        m = random.randint(0,self.__size)
+        if ( a == 0):
+            return {
+                "id": 7,
+                "val" : {
+                    "col": n,
+                    "row" : m
+                },
+                "description" : "The agent receives the first hint: “Region number 2 does not has treasure"
+            }
+        if ( a == 1):
+            return {
+                "id": 7,
+                "val" : {
+                    "col": n,
+                },
+                "description" : "The agent receives the first hint: “Region number 2 does not has treasure"
+            }
+        if ( a == 2):
+            return {
+                "id": 7,
+                "val" : {
+                    "row" : m
+                },
+                "description" : "The agent receives the first hint: “Region number 2 does not has treasure"
+            }
     def hint_9(self):
         n = random.randint(0, self.__regions)
         m = random.randint(0, self.__regions)
@@ -178,10 +247,27 @@ class Pirate():
 
     def hint_3(self):
         return {
-            "id": 12,
-            "val": {
-                "col": 1,
-                "row": 2
-            },
-            "description": "The agent receives the first hint: “Region number 2 does not has treasure"
+            "id": 13,
+            "val" : [n,m],
+            "description" : "The agent receives the first hint: “Region number 2 does not has treasure"
+        }
+    def hint_14(self):
+        n1 = random.randint(0, self._size // 4) -1
+        n2 = random.randint(0, self._size // 4) -1 
+        m1 = random.randint(self.__size*3 // 4, self.__size) -1
+        m2 = random.randint(self.__size*3 // 4, self.__size) -1
+        x1 = random.randint(self.__size // 4, self.__size // 2) -1
+        x2 = random.randint(self.__size // 4, self.__size // 2) -1
+        y1 = random.randint(self.__size // 2, self.__size*3 // 2) -1 
+        y2 = random.randint(self.__size // 2, self.__size*3 // 2) -1
+        return {
+            "id": 14,
+            "val" : [(n1,n2,m1,m2), (x1,x2,y1,y2)],
+            "description" : "The treasure is somewhere in the gap between 2 squares:"
+        }
+    def hint_15(self):
+        return {
+            "id": 15,
+            "val" : [],
+            "description" : "The treasure is in a region that has mountain."
         }
