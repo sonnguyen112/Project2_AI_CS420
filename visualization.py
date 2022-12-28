@@ -54,6 +54,13 @@ class VisualizationTool():
     def __update_game(self):
         if self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["text"] != None:
             self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["canvas"].delete(self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["text"])
+        for tile in self.__list_tiles_include_treasure:
+            self.__all_labels[tile[0]][tile[1]]["canvas"].configure(highlightbackground="white", highlightthickness=1)
+        for tile in self.__list_tiles_not_include_treasure:
+            if self.__all_labels[tile[0]][tile[1]]["text"] != None:
+                self.__all_labels[tile[0]][tile[1]]["canvas"].delete(self.__all_labels[tile[0]][tile[1]]["text"])
+            self.__all_labels[tile[0]][tile[1]]["canvas"].configure(bg=self.__color_list[int(
+                        self.__map[tile[0]][tile[1]][0])])
         machine_log = self.__log["machine_turn"][self.__turn - 1]
         self.__agent_pos = machine_log["agent_pos"]
         print(self.__agent_pos)
@@ -69,8 +76,8 @@ class VisualizationTool():
                 self.__all_labels[tile[0]][tile[1]]["canvas"].delete(self.__all_labels[tile[0]][tile[1]]["text"])
             self.__all_labels[tile[0]][tile[1]]["canvas"].configure(bg="white")
 
-        for tile in self.__list_tiles_not_include_treasure:
-            self.__all_labels[tile[0]][tile[1]]["canvas"].create_rectangle(self.__all_labels[tile[0]][tile[1]]["canvas"].winfo_x(),self.__all_labels[tile[0]][tile[1]]["canvas"].winfo_y(),self.__all_labels[tile[0]][tile[1]]["canvas"].winfo_width(),300, outline= 'yellow', width=4, fill='green')
+        for tile in self.__list_tiles_include_treasure:
+            self.__all_labels[tile[0]][tile[1]]["canvas"].configure(highlightbackground="red", highlightthickness=1)
 
     def __render_map(self):
         for index_row in range(len(self.__map)):

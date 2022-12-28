@@ -19,8 +19,8 @@ log = {
             "pirate_pos": (3, 3)  # or None
         }, {
             "agent_pos": (6, 8),
-            "list_tiles_not_include_treasure": [(1, 1), (2, 2)],
-            "list_tiles_include_treasure": [(2, 2), (0, 9)],
+            "list_tiles_not_include_treasure": [(1, 2), (3, 4)],
+            "list_tiles_include_treasure": [(1, 1), (1, 2)],
             "pirate_pos": (3, 3)  # or None
         }, {
             "agent_pos": (2, 10),
