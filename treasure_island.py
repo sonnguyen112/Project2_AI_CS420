@@ -1,4 +1,4 @@
-from map import Map
+from map_of_game import Map
 from agent import Agent
 from pirate import Pirate
 

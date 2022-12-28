@@ -1,5 +1,5 @@
 import random
-import map
+import map_of_game
 import math
 
 
@@ -188,7 +188,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
@@ -200,7 +200,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
@@ -212,7 +212,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
@@ -227,7 +227,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
@@ -239,7 +239,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
@@ -254,7 +254,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
@@ -273,7 +273,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
@@ -289,7 +289,7 @@ class Agent():
                             num_action_rest = num_action_rest-1
                             self.__hint_list_true.append(valid_list)
                             self.__hint_list_true = set.intersection(
-                                *map(set, self.__hint_list_true))
+                                *map_of_game(set, self.__hint_list_true))
                             self.__virtual_treasure = random.choice(
                                 self.__hint_list_true)
                     return self.__virtual_treasure
@@ -303,7 +303,7 @@ class Agent():
                             num_action_rest = num_action_rest-1
                             self.__hint_list_true.append(valid_list)
                             self.__hint_list_true = set.intersection(
-                                *map(set, self.__hint_list_true))
+                                *map_of_game(set, self.__hint_list_true))
                             self.__virtual_treasure = random.choice(
                                 self.__hint_list_true)
                     return self.__virtual_treasure
@@ -338,7 +338,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
@@ -350,7 +350,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
@@ -362,7 +362,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
@@ -374,7 +374,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
@@ -389,7 +389,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
@@ -401,7 +401,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
@@ -413,7 +413,7 @@ class Agent():
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true.append(obtain_list)
                     self.__hint_list_true = set.intersection(
-                        *map(set, self.__hint_list_true))
+                        *map_of_game(set, self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure

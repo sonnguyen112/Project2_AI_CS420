@@ -1,5 +1,5 @@
 import pickle
-from map import MapGenerateTool
+from map_of_game import MapGenerateTool
 
 map_generator = MapGenerateTool()
 
