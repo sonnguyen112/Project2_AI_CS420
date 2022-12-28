@@ -15,7 +15,7 @@ class TreasureIslandGame():
             print("Turn", self.__turn)
             hint = self.__pirate.give_hint(self.__turn)
             print("HINT", hint["description"])
-            agent_actions = self.__agent.action(hint["val"])
+            agent_actions = self.__agent.action(hint)
             print("AGENT ACTION", agent_actions)
             pirate_action = self.__pirate.action(self.__turn)
             print("PIRATE ACTION", pirate_action)
