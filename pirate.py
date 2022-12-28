@@ -247,6 +247,14 @@ class Pirate():
         x2 = random.randint(self.__size // 4, self.__size // 2) -1
         y1 = random.randint(self.__size // 2, self.__size*3 // 2) -1 
         y2 = random.randint(self.__size // 2, self.__size*3 // 2) -1
+        tiles1 = []
+        tiles2 = []
+        for x in range(n1,m1+1):
+            for y in range(n2,m2+1):
+                tiles1.append((x,y))
+        for x in range(n1,m1+1):
+            for y in range(n2,m2+1):
+                tiles2.append((x,y))
         return {
             "id": 14,
             "val" : [(n1,n2,m1,m2), (x1,x2,y1,y2)],
