@@ -1,10 +1,3 @@
-import tkinter
-import tkinter.scrolledtext as scrolledtext
-
-main_window = tkinter.Tk()
-
-txt = scrolledtext.ScrolledText(main_window, undo=True)
-txt['font'] = ('consolas', '12')
-txt.pack(expand=True, fill='both')
-
-main_window.mainloop()
+a = [1, 2]
+a += [3, 5, 4]
+print(a)

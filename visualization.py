@@ -86,8 +86,8 @@ class VisualizationTool():
                 label = Canvas(
                     self.__map_frame, bg=self.__color_list[int(
                         self.__map[index_row][index_col][0])],
-                    width=int(self.__map_frame["width"])//len(self.__map),
-                    height=int(self.__map_frame["height"])//len(self.__map), highlightthickness=1, highlightbackground="white")
+                    width=int(self.__map_frame["width"])//len(self.__map) - 2,
+                    height=int(self.__map_frame["height"])//len(self.__map) - 2, highlightthickness=1, highlightbackground="white")
                 text = None
                 if self.__map[index_row][index_col][-1] == "M" or self.__map[index_row][index_col][-1] == "P":
                     text = label.create_text(int(label["width"]) // 2, int(label["height"]) // 2,
