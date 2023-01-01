@@ -17,11 +17,14 @@ log = {
                 "list_tiles_not_include_treasure": [(1, 1), (2, 2)],
                 "description": "",
                 "pos" : (0, 0)
+                
             },
             "action_2":{
                 "list_tiles_not_include_treasure": [(1, 1), (2, 2)],
                 "description": "",
                 "pos" : (0, 0)
+                 "which_hint_checked": 1,
+            "is_hint_checked_true": True
             },
             "hint":{
                 "list_tiles" : [(0, 1)],
