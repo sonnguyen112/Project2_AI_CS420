@@ -3,24 +3,26 @@ import map_of_game
 import math
 import numpy as np
 import heapq
+from pirate import Pirate
 
 class Agent():
-    def __init__(self, map,turn_pirate_free):
+    def __init__(self,init_pos, map,turn_pirate_reveal,turn_pirate_free):
         self.__is_win = False
-        self.__pos = self.__set_init_pos(map)
+        self.__pos = init_pos
         self.__hint_list_true = []
         self.is_first_turn = True
-        self.__virtual_treasure = self.__set_init_pos(map)
+        self.__virtual_treasure = init_pos
         self.is_know_pirate_pos = False
         self.__pirate_pos = (0, 0)
         self.turn_pirate_free_agent_know=turn_pirate_free
         self.__hint_list_init = []
         self.turn_teleport = 1
-        for i in range(len(map)-1):
-                for j in range(len(map)-1):
+        for i in range(len(map)):
+                for j in range(len(map)):
                     if (map[i][j][-1] != '0' and map[i][j][-1] != 'M' and map[i][j][-1] != 'P'):
                         self.__hint_list_init.append((i, j))
         self.action_list=[]
+        self.__pirate = Pirate(map, turn_pirate_reveal, turn_pirate_free, self.__pos)
     def __set_init_pos(self, map):
         # Add code
         x = random.randint(0, len(map)-1)
@@ -39,158 +41,218 @@ class Agent():
     def is_win(self):  # Use to check whether agent win
         return self.__is_win
 
-    def check_hint(hint, game_map):
-        # Add code
-        return random.choice([True,False])
+    def intersection(self, lst1, lst2):
+        tup1 = map(tuple, lst1)
+        tup2 = map(tuple, lst2) 
+        return list(map(list, set(tup1).intersection(tup2)))
 
     def determine_treasure_location_init(self, hint, game_map):
         if hint["id"] == 1:
             obtain_list = []
-            for i in range(len(game_map)-1):
-                for j in range(len(game_map)-1):
-                    if (game_map[i][j] not in hint['val'] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+            for i in range(len(game_map)):
+                for j in range(len(game_map)):
+                    if ((i,j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
                         obtain_list.append((i, j))
-            self.__hint_list_true.append(obtain_list)
-            return random.choice(obtain_list)
+            
+            self.__hint_list_true=(list(filter(lambda x: x not in obtain_list,self.__hint_list_init)))
+            return random.choice(self.__hint_list_true)
 
         if hint["id"] == 2:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
-            self.__hint_list_true.append(obtain_list)
+            if obtain_list == [] :
+                self.__hint_list_true+=(self.__hint_list_init)
+                return random.choice(self.__hint_list_true)
+            self.__hint_list_true+=(obtain_list)
             return random.choice(obtain_list)
         if hint["id"] == 3:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
-            self.__hint_list_true.append(obtain_list)
+            if obtain_list == [] :
+                self.__hint_list_true+=(self.__hint_list_init)
+                return random.choice(self.__hint_list_true)
+            self.__hint_list_true+=(obtain_list)
             return random.choice(obtain_list)
         if hint["id"] == 4:
             obtain_list = []
-            for i in range(len(game_map)-1):
-                for j in range(len(game_map)-1):
-                    if (game_map[i][j] not in hint['val'] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+            for i in range(len(game_map)):
+                for j in range(len(game_map)):
+                    if ((i,j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
                         obtain_list.append((i, j))
-            self.__hint_list_true.append(obtain_list)
-            return random.choice(obtain_list)
+            self.__hint_list_true=(list(filter(lambda x: x not in obtain_list,self.__hint_list_init)))
+            return random.choice(self.__hint_list_true)
         if hint["id"] == 5:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
-            self.__hint_list_true.append(obtain_list)
+            if obtain_list == [] :
+                self.__hint_list_true+=(self.__hint_list_init)
+                return random.choice(self.__hint_list_true)
+            self.__hint_list_true+=(obtain_list)
             return random.choice(obtain_list)
         if hint["id"] == 6:
             obtain_list = []
-            for i in range(len(game_map)-1):
-                for j in range(len(game_map)-1):
-                    if (game_map[i][j] not in hint['val'] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+            for i in range(len(game_map)):
+                for j in range(len(game_map)):
+                    if ( (i,j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
                         obtain_list.append((i, j))
-            self.__hint_list_true.append(obtain_list)
-            return random.choice(obtain_list)
+            self.__hint_list_true=(list(filter(lambda x: x not in obtain_list,self.__hint_list_init)))
+            return random.choice(self.__hint_list_true)
         if hint["id"] == 7:
-            obtain_list = []
-            for i in range(len(game_map)-1):
-                for j in range(len(game_map)-1):
-                    if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
-                        obtain_list.append((i, j))
-            self.__hint_list_true.append(obtain_list)
-            return self.__pos
+            obtain_list = self.__hint_list_init.copy()
+     
+            for i in obtain_list:
+                if math.sqrt((i[0]-self.__pos[0])**2 + (i[1]-self.__pos[1])**2) > math.sqrt(((i[0]-self.__pirate_pos[0])**2 + (i[1]-self.__pirate_pos[1])**2)):
+                    obtain_list.remove(i)
+            
+            if self.is_change_virtual_treasure(obtain_list) == True:
+                if self.__pirate.check_hint(hint):
+                    num_action_rest = num_action_rest-1
+                    self.__hint_list_true+=(obtain_list)
+                    self.__virtual_treasure = random.choice(
+                        self.__hint_list_true)
+                    self.action_list.append(1)
+                else: 
+                    num_action_rest = num_action_rest-1
+                    self.action_list.append(1)
+                    self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
+            if self.__virtual_treasure not in self.__hint_list_true:
+                self.__virtual_treasure = random.choice(
+                        self.__hint_list_true)
+            return self.__virtual_treasure
         if hint["id"] == 8:
             if "row" not in hint["val"] or "col" not in hint["val"]:
                 if "row" in hint["val"]:
                     valid_list = []
-                    for i in range(1, len(game_map) - 2):
-                        if game_map[hint["val"]["row"]][i] != 0 and game_map[hint["val"]["row"]][i][-1] != "M" and game_map[hint["val"]["row"]][i][-1] != "P":
-                            valid_list.append((hint["val"]["row"], i))
-                    self.__hint_list_true.append(valid_list)
+                    for i in range(0, len(game_map) ):
+                        if game_map[hint["val"]["row"]-1][i][-1] != "0" and game_map[hint["val"]["row"]-1][i][-1] != "M" and game_map[hint["val"]["row"]-1][i][-1] != "P":
+                            valid_list.append((hint["val"]["row"]-1, i))
+                    if valid_list == [] :
+                        self.__hint_list_true+=(self.__hint_list_init)
+                        return random.choice(self.__hint_list_true)
+                    self.__hint_list_true+=(valid_list)
                     return random.choice(valid_list)
                 else:
                     valid_list = []
-                    for i in range(1, len(game_map) - 2):
-                        if game_map[i][hint["val"]["col"]] != 0 and game_map[i][hint["val"]["col"]][-1] != "M" and game_map[i][hint["val"]["col"]][-1] != "P":
-                            valid_list.append((i, hint["val"]["col"]))
-                    self.__hint_list_true.append(valid_list)
+                    for i in range(0, len(game_map) ):
+                        if game_map[i][hint["val"]["col"]-1][-1] != "0" and game_map[i][hint["val"]["col"]-1][-1] != "M" and game_map[i][hint["val"]["col"]-1][-1] != "P":
+                            valid_list.append((i, hint["val"]["col"]-1))
+                    if valid_list == [] :
+                        self.__hint_list_true+=(self.__hint_list_init)
+                        return random.choice(self.__hint_list_true)
+                    self.__hint_list_true+=(valid_list)
                     return random.choice(valid_list)
             else:
                 self.__hint_list_true.append(
-                    [(hint["val"]["row"], hint["val"]["col"])])
-                self.teleporthint(["val"]["row"],hint["val"]["col"])
-                return (hint["val"]["row"], hint["val"]["col"])
+                    (hint["val"]["row"]-1, hint["val"]["col"]-1))
+                self.teleport(hint["val"]["row"]-1,hint["val"]["col"]-1)
+                return (hint["val"]["row"]-1, hint["val"]["col"]-1)
         if hint["id"] == 9:
             obtain_list = []
             if "row" not in hint["val"] or "col" not in hint["val"]:
                 if "row" in hint["val"]:
-                    for i in range(len(game_map)-1):
-                        for j in range(len(game_map)-1):
-                            if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P' and i != hint["val"]["row"]):
+                    for i in range(0,len(game_map)):
+                        for j in range(0,len(game_map)):
+                            if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P' and i == hint["val"]["row"]-1):
                                 obtain_list.append((i, j))
                 elif "col" in hint["val"]:
-                    for i in range(len(game_map)-1):
-                        for j in range(len(game_map)-1):
-                            if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P' and j != hint["val"]["col"]):
+                    for i in range(len(game_map)):
+                        for j in range(len(game_map)):
+                            if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P' and j == hint["val"]["col"]-1):
                                 obtain_list.append((i, j))
             else:
-                for i in range(len(game_map)-1):
-                    for j in range(len(game_map)-1):
-                        if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P' and i != hint["val"]["row"] and j != hint["val"]["col"]):
+                for i in range(len(game_map)):
+                    for j in range(len(game_map)):
+                        if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P' and i == hint["val"]["row"]-1 and j == hint["val"]["col"]-1):
                             obtain_list.append((i, j))
-            self.__hint_list_true.append(obtain_list)
-            return random.choice(obtain_list)
+            self.__hint_list_true=(list(filter(lambda x: x not in obtain_list,self.__hint_list_init)))
+            return random.choice(self.__hint_list_true)
         if hint["id"] == 10:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
-            self.__hint_list_true.append(obtain_list)
+            if obtain_list == [] :
+                self.__hint_list_true+=(self.__hint_list_init)
+                return random.choice(self.__hint_list_true)
+            self.__hint_list_true+=(obtain_list)
             return random.choice(obtain_list)
         if hint["id"] == 11:
-            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
+            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][0] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
-            self.__hint_list_true.append(obtain_list)
+            if obtain_list == [] :
+                self.__hint_list_true+=(self.__hint_list_init)
+                return random.choice(self.__hint_list_true)
+            self.__hint_list_true+=(obtain_list)
             return random.choice(obtain_list)
         if hint["id"] == 12:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
-            self.__hint_list_true.append(obtain_list)
+            if obtain_list == [] :
+                self.__hint_list_true==(self.__hint_list_init)
+                return random.choice(self.__hint_list_true)
+            self.__hint_list_true+=(obtain_list)
             return random.choice(obtain_list)
         if hint["id"] == 13:
             obtain_list = []
-            for i in range(len(game_map)-1):
-                for j in range(len(game_map)-1):
-                    if (game_map[i][j] not in hint['val'] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+            for i in range(len(game_map)):
+                for j in range(len(game_map)):
+                    if ((i,j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
                         obtain_list.append((i, j))
-            self.__hint_list_true.append(obtain_list)
-            return random.choice(obtain_list)
+            self.__hint_list_true=(list(filter(lambda x: x not in obtain_list,self.__hint_list_init)))
+            return random.choice(self.__hint_list_true)
         if hint["id"] == 14:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
-            self.__hint_list_true.append(obtain_list)
+           
+            if obtain_list == [] :
+                self.__hint_list_true+=(self.__hint_list_init)
+                return random.choice(self.__hint_list_true)
+            self.__hint_list_true+=(obtain_list)
             return random.choice(obtain_list)
         if hint["id"] == 15:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
-            self.__hint_list_true.append(obtain_list)
+           
+            if obtain_list == [] :
+                self.__hint_list_true+=(self.__hint_list_init)
+                return random.choice(self.__hint_list_true)
+            print("khoi dep trai")
+            print(obtain_list)
+            
+            self.__hint_list_true+=obtain_list
+            print("khoi sieu dep trai")
+            print(self.__hint_list_true)
+            return random.choice(obtain_list)
+        if hint["id"] == 16:
+            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
+                               [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
+           
+            if obtain_list == [] :
+                self.__hint_list_true=(self.__hint_list_init)
+                return random.choice(self.__hint_list_true)
+            self.__hint_list_true=obtain_list
             return random.choice(obtain_list)
 
 
     def only_move(self, hint):
         pass
 
-    def small_scan(self,map):
-        y = self.get_pos()[0]
-        x = self.get_pos()[1]
+    def small_scan(self,game_map):
+        y = self.get_pos()[1]
+        x = self.get_pos()[0]
         obtain_list=[]
         for x_ in range(x-1, x+2):
             for y_ in range(y-1, y+2):
-                if (0 <= x_ < len(map) and 0 <= y_ < len(map)):
-                    if map[x_][y_][-1] != '0' and map[x_][y_][-1] != 'M' and map[x_][y_][-1] != 'P':
+                if (0 <= x_ < len(game_map) and 0 <= y_ < len(game_map)):
+                    if game_map[x_][y_][-1] != '0' and game_map[x_][y_][-1] != 'M' and game_map[x_][y_][-1] != 'P':
                         obtain_list.append((x_,y_))
-                    if map[x_][y_][-1] == 'T':
+                    if game_map[x_][y_][-1] == 'T':
                         self.__is_win = True
         if self.__is_win != True:
-            self.__hint_list_true.append(obtain_list)
-            self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+            self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
                         
 
     def stay_large_scan(self, hint, map):
-        y = self.get_pos()[0]
-        x = self.get_pos()[1]
+        y = self.get_pos()[1]
+        x = self.get_pos()[0]
         obtain_list=[]
         for x_ in range(x-2, x+3):
             for y_ in range(y-2, y+3):
@@ -200,34 +262,34 @@ class Agent():
                     if map[x_][y_][-1] == 'T':
                         self.__is_win = True
         if self.__is_win != True:
-            self.__hint_list_true.append(obtain_list)
-            self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+            self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
 
     def is_change_virtual_treasure(self, current_obtain_list):
         if self.__virtual_treasure not in current_obtain_list:
             return True
         return False
 
+ 
+
     def determine_treasure_location_normal(self, hint, game_map, num_action_rest):
         if hint["id"] == 1:
             obtain_list = []
-            for i in range(len(game_map)-1):
-                for j in range(len(game_map)-1):
-                    if (game_map[i][j] not in hint['val'] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+            for i in range(len(game_map)):
+                for j in range(len(game_map)):
+                    if ( (i,j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
                         obtain_list.append((i, j))
-            if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+            if self.is_change_virtual_treasure(obtain_list) == False:
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
                     self.action_list.append(1)
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+                    self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                 else: 
                     num_action_rest = num_action_rest-1
                     self.action_list.append(1)
+                    self.__hint_list_true = self.intersection(self.__hint_list_true,obtain_list)
+                
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
@@ -236,17 +298,16 @@ class Agent():
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+                    self.__hint_list_true = self.intersection(self.__hint_list_true,obtain_list)
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     self.action_list.append(1)
                 else: 
                     num_action_rest = num_action_rest-1
                     self.action_list.append(1)
+                    self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
@@ -254,39 +315,42 @@ class Agent():
         if hint["id"] == 3:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
+            print("obtainlist3")
+            print(obtain_list)
+
             if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+                    self.__hint_list_true = self.intersection(self.__hint_list_true,obtain_list)
+                    print("hintListtrue 3")
+                    print(self.__hint_list_true)
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     self.action_list.append(1)
                 else: 
                     num_action_rest = num_action_rest-1
                     self.action_list.append(1)
+                    self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 4:
             obtain_list = []
-            for i in range(len(game_map)-1):
-                for j in range(len(game_map)-1):
-                    if (game_map[i][j] not in hint['val'] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+            for i in range(len(game_map)):
+                for j in range(len(game_map)):
+                    if ( (i,j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
                         obtain_list.append((i, j))
-            if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+            if self.is_change_virtual_treasure(obtain_list) == False:
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+                    self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     self.action_list.append(1)
                 else: 
                     num_action_rest = num_action_rest-1
+                    self.__hint_list_true = self.intersection(self.__hint_list_true,obtain_list)
                     self.action_list.append(1)
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -295,47 +359,50 @@ class Agent():
         if hint["id"] == 5:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
+            print("obtain_list")
+            print(obtain_list)
             if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+                    self.__hint_list_true = self.intersection(self.__hint_list_true,obtain_list)
+                    print("hintlisttrue 5")
+                    print(self.__hint_list_true)
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     self.action_list.append(1)
                 else: 
                     num_action_rest = num_action_rest-1
                     self.action_list.append(1)
+                    self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 6:
             obtain_list = []
-            for i in range(len(game_map)-1):
-                for j in range(len(game_map)-1):
-                    if (game_map[i][j] not in hint['val'] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+            for i in range(len(game_map)):
+                for j in range(len(game_map)):
+                    if ( (i,j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
                         obtain_list.append((i, j))
-            if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+            if self.is_change_virtual_treasure(obtain_list) == False:
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+                    self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     self.action_list.append(1)
                 else: 
                     num_action_rest = num_action_rest-1
                     self.action_list.append(1)
+                    self.__hint_list_true = self.intersection(self.__hint_list_true,obtain_list)
+                    
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 7:
             obtain_list = self.__hint_list_true.copy()
-            if hint['val'] == 'agent':
+            if self.__pirate(hint) == True:
                 for i in obtain_list:
                     if math.sqrt((i[0]-self.__pos[0])**2 + (i[1]-self.__pos[1])**2) > math.sqrt(((i[0]-self.__pirate_pos[0])**2 + (i[1]-self.__pirate_pos[1])**2)):
                         obtain_list.remove(i)
@@ -344,17 +411,16 @@ class Agent():
                     if math.sqrt((i[0]-self.__pos[0])**2 + (i[1]-self.__pos[1])**2) < math.sqrt(((i[0]-self.__pirate_pos[0])**2 + (i[1]-self.__pirate_pos[1])**2)):
                         obtain_list.remove(i)
             if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+                    self.__hint_list_true = self.intersection(self.__hint_list_true,obtain_list)
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     self.action_list.append(1)
                 else: 
                     num_action_rest = num_action_rest-1
                     self.action_list.append(1)
+                    self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
@@ -363,89 +429,92 @@ class Agent():
             if "row" not in hint["val"] or "col" not in hint["val"]:
                 if "row" in hint["val"]:
                     valid_list = []
-                    for i in range(1, len(game_map) - 2):
-                        if game_map[hint["val"]["row"]][i] != 0 and game_map[hint["val"]["row"]][i][-1] != "M" and game_map[hint["val"]["row"]][i][-1] != "P":
-                            valid_list.append((hint["val"]["row"], i))
+                    for i in range(0, len(game_map) - 1):
+                        if game_map[hint["val"]["row"]-1][i][-1] != '0' and game_map[hint["val"]["row"]-1][i][-1] != "M" and game_map[hint["val"]["row"]-1][i][-1] != "P":
+                            valid_list.append((hint["val"]["row"]-1, i))
                     if self.is_change_virtual_treasure(valid_list) == True:
-                        if self.check_hint(hint, game_map):
+                        if self.__pirate.check_hint(hint):
                             num_action_rest = num_action_rest-1
-                            self.__hint_list_true.append(valid_list)
-                            self.__hint_list_true = list(set.intersection(
-                                *map(set, self.__hint_list_true)))
+                            self.__hint_list_true = self.intersection(self.__hint_list_true,valid_list)
                             self.__virtual_treasure = random.choice(
                                 self.__hint_list_true)
                             self.action_list.append(1)
                         else: 
                             num_action_rest = num_action_rest-1
                             self.action_list.append(1)
+                            self.__hint_list_true=list(filter(lambda x: x not in valid_list,self.__hint_list_true))
                     if self.__virtual_treasure not in self.__hint_list_true:
                         self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     return self.__virtual_treasure
                 else:
                     valid_list = []
-                    for i in range(1, len(game_map) - 2):
-                        if game_map[i][hint["val"]["col"]] != 0 and game_map[i][hint["val"]["col"]][-1] != "M" and game_map[i][hint["val"]["col"]][-1] != "P":
-                            valid_list.append((i, hint["val"]["col"]))
+                    print("size of map")
+                    print(len(game_map))
+                    for i in range(0, len(game_map) - 1):
+                        if game_map[i][hint["val"]["col"]-1] != '0' and game_map[i][hint["val"]["col"]-1][-1] != "M" and game_map[i][hint["val"]["col"]-1][-1] != "P":
+                            valid_list.append((i, hint["val"]["col"]-1))
                     if self.is_change_virtual_treasure(valid_list) == True:
-                        if self.check_hint(hint, game_map):
+                        if self.__pirate.check_hint(hint):
                             num_action_rest = num_action_rest-1
-                            self.__hint_list_true.append(valid_list)
-                            self.__hint_list_true = list(set.intersection(
-                                *map(set, self.__hint_list_true)))
+                            self.__hint_list_true = self.intersection(self.__hint_list_true,valid_list)
                             self.__virtual_treasure = random.choice(
                                 self.__hint_list_true)
                             self.action_list.append(1)
                         else: 
                             num_action_rest = num_action_rest-1
                             self.action_list.append(1)
+                            self.__hint_list_true=list(filter(lambda x: x not in valid_list,self.__hint_list_true))
                     if self.__virtual_treasure not in self.__hint_list_true:
                         self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     return self.__virtual_treasure
             else:
-                if self.check_hint(hint, game_map):
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true = [
-                        (hint["val"]["row"], hint["val"]["col"])]
+                        (hint["val"]["row"]-1, hint["val"]["col"]-1)]
                     self.__virtual_treasure = (
-                        hint["val"]["row"], hint["val"]["col"])
-                    self.teleport(hint["val"]["row"],hint["val"]["col"])
+                        hint["val"]["row"]-1, hint["val"]["col"]-1)
+                    self.teleport(hint["val"]["row"]-1,hint["val"]["col"]-1)
                     self.action_list.append(1)
                 else: 
-                            num_action_rest = num_action_rest-1
-                            self.action_list.append(1)
+                    valid_list = [(hint["val"]["row"]-1,hint["val"]["col"]-1)]
+                    num_action_rest = num_action_rest-1
+                    self.action_list.append(1)
+                    self.__hint_list_true=list(filter(lambda x: x not in valid_list,self.__hint_list_true))
+                    print("hint_list_true after 8")
+                    print(self.__hint_list_true)
                 return self.__virtual_treasure
         if hint["id"] == 9:
             obtain_list = []
             if "row" not in hint["val"] or "col" not in hint["val"]:
                 if "row" in hint["val"]:
-                    for i in range(len(game_map)-1):
-                        for j in range(len(game_map)-1):
-                            if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P' and i != hint["val"]["row"]):
+                    for i in range(len(game_map)):
+                        for j in range(len(game_map)):
+                            if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P' and i == hint["val"]["row"]-1):
                                 obtain_list.append((i, j))
                 elif "col" in hint["val"]:
-                    for i in range(len(game_map)-1):
-                        for j in range(len(game_map)-1):
-                            if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P' and j != hint["val"]["col"]):
+                    for i in range(len(game_map)):
+                        for j in range(len(game_map)):
+                            if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P' and j == hint["val"]["col"]-1):
                                 obtain_list.append((i, j))
             else:
-                for i in range(len(game_map)-1):
-                    for j in range(len(game_map)-1):
-                        if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P' and i != hint["val"]["row"] and j != hint["val"]["col"]):
+                for i in range(len(game_map)):
+                    for j in range(len(game_map)):
+                        if (game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P' and i == hint["val"]["row"]-1 and j == hint["val"]["col"]-1):
                             obtain_list.append((i, j))
-            if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+            if self.is_change_virtual_treasure(obtain_list) == False:
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+                    self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     self.action_list.append(1)
                 else: 
-                            num_action_rest = num_action_rest-1
-                            self.action_list.append(1)
+                        num_action_rest = num_action_rest-1
+                        self.action_list.append(1)
+                        self.__hint_list_true = self.intersection(self.__hint_list_true,obtain_list)
             if self.__virtual_treasure not in self.__hint_list_true:
                         self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
@@ -454,17 +523,16 @@ class Agent():
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map_of_game(set, self.__hint_list_true)))
+                    self.__hint_list_true = self.intersection(self.__hint_list_true,obtain_list)
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     self.action_list.append(1)
                 else: 
                             num_action_rest = num_action_rest-1
                             self.action_list.append(1)
+                            self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
             if self.__virtual_treasure not in self.__hint_list_true:
                         self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
@@ -473,17 +541,16 @@ class Agent():
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+                    self.__hint_list_true = self.intersection(self.__hint_list_true,obtain_list)
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     self.action_list.append(1)
                 else: 
                             num_action_rest = num_action_rest-1
                             self.action_list.append(1)
+                            self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
             if self.__virtual_treasure not in self.__hint_list_true:
                         self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
@@ -492,39 +559,37 @@ class Agent():
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+                    self.__hint_list_true = self.intersection(self.__hint_list_true,obtain_list)
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     self.action_list.append(1)
                 else: 
-                            num_action_rest = num_action_rest-1
-                            self.action_list.append(1)
+                    num_action_rest = num_action_rest-1
+                    self.action_list.append(1)
+                    self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
             if self.__virtual_treasure not in self.__hint_list_true:
                         self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 13:
             obtain_list = []
-            for i in range(len(game_map)-1):
-                for j in range(len(game_map)-1):
-                    if (game_map[i][j] not in hint['val'] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+            for i in range(len(game_map)):
+                for j in range(len(game_map)):
+                    if ((i,j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
                         obtain_list.append((i, j))
-            if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+            if self.is_change_virtual_treasure(obtain_list) == False:
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+                    self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     self.action_list.append(1)
                 else: 
                             num_action_rest = num_action_rest-1
                             self.action_list.append(1)
+                            self.__hint_list_true = self.intersection(self.__hint_list_true,valid_list)
             if self.__virtual_treasure not in self.__hint_list_true:
                         self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
@@ -533,17 +598,16 @@ class Agent():
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+                    self.__hint_list_true = self.intersection(self.__hint_list_true,valid_list)
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     self.action_list.append(1)
                 else: 
                             num_action_rest = num_action_rest-1
                             self.action_list.append(1)
+                            self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
             if self.__virtual_treasure not in self.__hint_list_true:
                         self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
@@ -552,21 +616,39 @@ class Agent():
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
-                if self.check_hint(hint, game_map):
+                if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
-                    self.__hint_list_true.append(obtain_list)
-                    self.__hint_list_true = list(set.intersection(
-                        *map(set, self.__hint_list_true)))
+                    self.__hint_list_true = self.intersection(self.__hint_list_true,obtain_list)
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     self.action_list.append(1)
                 else: 
                             num_action_rest = num_action_rest-1
                             self.action_list.append(1)
+                            self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
             if self.__virtual_treasure not in self.__hint_list_true:
                         self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
             return self.__virtual_treasure
+        if hint["id"] == 16:
+            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
+                               [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
+            if self.is_change_virtual_treasure(obtain_list) == True:
+                if self.__pirate.check_hint(hint):
+                    num_action_rest = num_action_rest-1
+                    self.__hint_list_true = self.intersection(self.__hint_list_true,obtain_list)
+                    self.__virtual_treasure = random.choice(
+                        self.__hint_list_true)
+                    self.action_list.append(1)
+                else: 
+                            num_action_rest = num_action_rest-1
+                            self.action_list.append(1)
+                            self.__hint_list_true=list(filter(lambda x: x not in obtain_list,self.__hint_list_true))
+            if self.__virtual_treasure not in self.__hint_list_true:
+                        self.__virtual_treasure = random.choice(
+                        self.__hint_list_true)
+            return self.__virtual_treasure
+                            
 
     def teleport(self, x,y):
         self.__pos= (x,y)
@@ -575,11 +657,14 @@ class Agent():
         if self.is_first_turn:
             self.__virtual_treasure = self.determine_treasure_location_init(
                 hint, map)
+            print("Khoi hoan hao")
+            print(self.__hint_list_true)
             self.is_first_turn = False
         else:
             self.determine_treasure_location_normal(hint, map, num_action_rest)
 
     def heuristic(self, a, b):
+        # print("Bug",a, b)
         return np.sqrt((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2)
 
     def A_start_find_way(self, game_map,direction):
@@ -624,107 +709,231 @@ class Agent():
                     heapq.heappush(oheap, (fscore[neighbor], neighbor))
             
         return False
+    
+    def get_count(self,num_list):
+        count = 1
+        listA=[]
+        for i in range(1,len(num_list)):
+            if num_list[i]==num_list[i-1] :
+                count = count + 1
+            else: 
+                listA.append(count)
+                count = 1
+            if i == len(num_list)-1:
+                listA.append(count)
+        return listA  
 
  #count down agent turn
     def action(self, hint, map):
-        if self.turn_pirate_free_agent_know == 0 and self.turn_teleport>0:
-            if self.heuristic(self.__pirate_pos,self.__virtual_treasure)<self.heuristic(self.__pos,self.__virtual_treasure):
-                self.teleport(self.__virtual_treasure[0],self.__virtual_treasure[1])
-                self.turn_teleport=self.turn_teleport-1
-        num_action_rest = 2
-        self.receive_hint(self, hint, map, num_action_rest)
-        if self.__pos == self.__virtual_treasure:
-                self.stay_large_scan   
-                num_action_rest = num_action_rest - 1
-                self.action_list.append(4) 
-        direction = []
-        way_to_treasure = self.A_start_find_way(map,direction)
-        remain = 0
-        steps = 0
-        dir_of_agent = []
-        if way_to_treasure != False :
-            for i in range(len(direction)):
-                sum_of_direction = 1
-                if direction[i] == direction[i+1]:
-                    sum_of_direction += 1
+        if(hint==None):
+                for x in self.__hint_list_true:
+                    if map[x[0]][x[1]][-1]=='T':
+                        self.__is_win = True
+        else:
+            if self.turn_pirate_free_agent_know == 0 and self.turn_teleport>0:
+                if self.heuristic(self.__pirate_pos,self.__virtual_treasure)<self.heuristic(self.__pos,self.__virtual_treasure):
+                    self.teleport(self.__virtual_treasure[0],self.__virtual_treasure[1])
+                    self.turn_teleport=self.turn_teleport-1
+            num_action_rest = 2
+            steps = 0
+            while num_action_rest>0:
+                
+                self.receive_hint(hint, map, num_action_rest)
+                direction = []
+                print("khoi vo dich")
+                print(self.__hint_list_true)
+                way_to_treasure = self.A_start_find_way(map,direction)
+                direction=direction[::-1]
+                remain = 0
+                remain2 = 0
+                steps = 0
+                dir_of_agent = []
+                action_1 = ""
+                action_2 = ""
+                print("bat tu")
+                print(self.__hint_list_true)
+                print("way to treasure")
+                print(way_to_treasure)
+                print(self.__pos)
+                print(self.__virtual_treasure)
+                print("direction")
+                print(direction)
+                if way_to_treasure != False :
+                    summary_list_dir =  self.get_count(direction)
+                    for i in summary_list_dir:
+                        if direction[remain2] == (1,0):
+                            dir_of_agent.append("south")
+                        if direction[remain2] == (-1,0):
+                            dir_of_agent.append("north")
+                        if direction[remain2] == (0,1):
+                            dir_of_agent.append("east")
+                        if direction[remain2] == (0,-1):
+                            dir_of_agent.append("west")
+                        remain2 = remain2 + i -1
+                        if num_action_rest > 0 :
+                            if self.__pos == self.__virtual_treasure:
+                                    self.stay_large_scan  
+                                    self.action_list.append(4)  
+                                    num_action_rest = num_action_rest-1
+                            else: 
+                                if i<=2:
+                                    steps = i
+                                    # print(remain + sum_of_direction)
+                                    self.__pos=way_to_treasure[remain + i-1]
+                                    remain=remain+i
+                                    
+                                    self.small_scan(map)
+                                    self.action_list.append(2) 
+                                    num_action_rest=num_action_rest-1
+                                else :
+                                    steps = i
+                                    # print("khoi hoan hao")
+                                    # print(remain + sum_of_direction)
+                                    self.__pos=way_to_treasure[remain + i-1]
+                                    remain=remain+i
+                                    self.action_list.append(3) 
+                                    num_action_rest=num_action_rest-1
+                    if num_action_rest > 0:
+                            self.stay_large_scan  
+                            self.action_list.append(4)  
+                            num_action_rest = num_action_rest-1
                 else:
-                    if direction[i] == (1,0):
-                        dir_of_agent.append("south")
-                    if direction[i] == (-1,0):
-                        dir_of_agent.append("north")
-                    if direction[i] == (0,1):
-                        dir_of_agent.append("east")
-                    if direction[i] == (0,-1):
-                        dir_of_agent.append("west")
-                    if num_action_rest > 0 :
-                        if self.__pos == self.__virtual_treasure:
+                    if num_action_rest > 0:
                                 self.stay_large_scan  
                                 self.action_list.append(4)  
                                 num_action_rest = num_action_rest-1
-                        else: 
-                            if sum_of_direction<=2:
-                                steps = sum_of_direction
-                                self.__pos=way_to_treasure[remain + sum_of_direction]
-                                remain=remain+sum_of_direction
-                                self.small_scan(map)
-                                self.action_list.append(2) 
-                                num_action_rest=num_action_rest-1
-                            else :
-                                steps = sum_of_direction
-                                self.__pos=way_to_treasure[remain + sum_of_direction]
-                                remain=remain+sum_of_direction
-                                self.action_list.append(3) 
-                                num_action_rest=num_action_rest-1
-        action_1 = ""
-        action_2 = ""
-        if self.action_list[0] == 2:
-            action_1=f"The agent moves {steps} steps to the {dir_of_agent[0]} and SMALL SCAN"
-        if self.action_list[0] == 1:
-            action_1=f"The agent verifies {hint['id']}, {hint['id']} is {self.check_hint(hint, map)}"
-        if self.action_list[0] == 3:
-            action_1=f"The agent moves 4 steps to the {dir_of_agent[0]}"
-        if self.action_list[0] ==4:
-            action_1="The agent perform a LARGE SCAN"
-        if self.action_list[1] == 2:
-            action_2=f"The agent moves {steps} steps to the {dir_of_agent[0]} and SMALL SCAN"
-        if self.action_list[1] == 1:
-            action_2=f"The agent verifies {hint['id']}, {hint['id']} is {self.check_hint(hint, map)}"
-        if self.action_list[1] == 3:
-            action_2=f"The agent moves 4 steps to the {dir_of_agent[0]}"
-        if self.action_list[1] ==4:
-            action_2="The agent perform a LARGE SCAN"
-        self.action_list.clear()
-        return {
-            "machine_turn": 
-                {
-                    "agent_pos": self.__pos,
-                    "list_tiles_not_include_treasure": list(filter(lambda x: x not in self.__hint_list_true,self.__hint_list_init)),
-                    "list_tiles_include_treasure": self.__hint_list_true,
-                    "pirate_pos": self.__pirate_pos  # or None
-                }
-            ,
-            "human_turn": 
-                {
-                    "hint": hint['description'],
-                    "action_1": action_1,
-                    "action_2": action_2,
-                    "which_hint_checked": hint['id'],
-                    "is_hint_checked_true": self.check_hint(hint, map)
-                }
-            
+
+
+
+
+
+                #     for i in range(len(direction)-1):
+                #         sum_of_direction = 1
+                #         if i+1 < len(direction):
+                #             if direction[i] == direction[i+1]:
+                #                 sum_of_direction += 1
+                #             else:
+                #                 if direction[i] == (1,0):
+                #                     dir_of_agent.append("south")
+                #                 if direction[i] == (-1,0):
+                #                     dir_of_agent.append("north")
+                #                 if direction[i] == (0,1):
+                #                     dir_of_agent.append("east")
+                #                 if direction[i] == (0,-1):
+                #                     dir_of_agent.append("west")
+                #                 if num_action_rest > 0 :
+                #                     if self.__pos == self.__virtual_treasure:
+                #                             self.stay_large_scan  
+                #                             self.action_list.append(4)  
+                #                             num_action_rest = num_action_rest-1
+                #                     else: 
+                #                         if sum_of_direction<=2:
+                #                             steps = sum_of_direction
+                #                             # print(remain + sum_of_direction)
+                #                             self.__pos=way_to_treasure[remain + sum_of_direction-1]
+                #                             remain=remain+sum_of_direction
+                                            
+                #                             self.small_scan(map)
+                #                             self.action_list.append(2) 
+                #                             num_action_rest=num_action_rest-1
+                #                         else :
+                #                             steps = sum_of_direction
+                #                             # print("khoi hoan hao")
+                #                             # print(remain + sum_of_direction)
+                #                             self.__pos=way_to_treasure[remain + sum_of_direction-1]
+                #                             remain=remain+sum_of_direction
+                #                             self.action_list.append(3) 
+                #                             num_action_rest=num_action_rest-1
+                #         else:
+                #                 if direction[i] == (1,0):
+                #                     dir_of_agent.append("south")
+                #                 if direction[i] == (-1,0):
+                #                     dir_of_agent.append("north")
+                #                 if direction[i] == (0,1):
+                #                     dir_of_agent.append("east")
+                #                 if direction[i] == (0,-1):
+                #                     dir_of_agent.append("west")
+                #                 if num_action_rest > 0 :
+                #                     if self.__pos == self.__virtual_treasure:
+                #                             self.stay_large_scan  
+                #                             self.action_list.append(4)  
+                #                             num_action_rest = num_action_rest-1
+                #                     else: 
+                #                         if sum_of_direction<=2:
+                #                             steps = sum_of_direction
+                #                             self.__pos=way_to_treasure[remain + sum_of_direction-1]
+                #                             remain=remain+sum_of_direction
+                #                             self.small_scan(map)
+                #                             self.action_list.append(2) 
+                #                             num_action_rest=num_action_rest-1
+                #                         else :
+                #                             steps = sum_of_direction
+                #                             self.__pos=way_to_treasure[remain + sum_of_direction-1]
+                #                             remain=remain+sum_of_direction
+                #                             self.action_list.append(3) 
+                #                             num_action_rest=num_action_rest-1
+                #     if num_action_rest > 0:
+                #             self.stay_large_scan  
+                #             self.action_list.append(4)  
+                #             num_action_rest = num_action_rest-1
+                # if num_action_rest > 0 :
+                #     self.stay_large_scan  
+                #     self.action_list.append(4)  
+                #     num_action_rest=num_action_rest-1
+            if self.action_list[0] == 2:
+                        action_1=f"The agent moves {steps} steps to the {dir_of_agent[0]} and SMALL SCAN"
+                        dir_of_agent.pop(0)
+            if self.action_list[0] == 1:
+                action_1=f"The agent verifies {hint['id']}, {hint['id']} is {self.__pirate.check_hint(hint)}"
+            if self.action_list[0] == 3:
+                action_1=f"The agent moves {steps} steps to the {dir_of_agent[0]}"
+                dir_of_agent.pop(0)
+            if self.action_list[0] ==4:
+                action_1="The agent perform a LARGE SCAN"
+            if self.action_list[1] == 2:
+                action_2=f"The agent moves {steps} steps to the {dir_of_agent[0]} and SMALL SCAN"
+                dir_of_agent.pop(0)
+            if self.action_list[1] == 1:
+                action_2=f"The agent verifies {hint['id']}, {hint['id']} is {self.__pirate.check_hint(hint)}"
+            if self.action_list[1] == 3:
+                action_2=f"The agent moves {steps} steps to the {dir_of_agent[0]}"
+                dir_of_agent.pop(0)
+            if self.action_list[1] ==4:
+                action_2="The agent perform a LARGE SCAN"
+            self.action_list.clear()
+            return {
+                "machine_turn": 
+                    {
+                        "agent_pos": self.__pos,
+                        "list_tiles_not_include_treasure": list(filter(lambda x: x not in self.__hint_list_true,self.__hint_list_init)),
+                        "list_tiles_include_treasure": self.__hint_list_true,
+                        "pirate_pos": self.__pirate_pos,  # or None
+                        "is_win":self.__is_win
+                    }
+                ,
+                "human_turn": 
+                    {
+                        "hint": hint,
+                        "action_1": action_1,
+                        "action_2": action_2,
+                        "which_hint_checked": hint['id'],
+                        "is_hint_checked_true": self.__pirate.check_hint(hint)
+                    }
+                
         }
+        
      
-
-
-# map_generator = map_of_game.MapGenerateTool()
-# map_of_game = map_generator.generate_map(16, 4)
-# agent = Agent(map_of_game.get_map(),3)
-# direction = []
-# print(agent.A_start_find_way(map_of_game.get_map(),direction))
-# print(direction[::-1] )
-# my_dict = {i:direction.count(i) for i in direction}
-# print(my_dict)
-# print(agent.get_pos())
-# print(agent.get_virtual_treasure())
-# print(map_of_game)
+if __name__ == "__main__":
+    pass
+    # map_generator = map_of_game.MapGenerateTool()
+    # map_of_game = map_generator.generate_map(16, 4)
+    # agent = Agent(map_of_game.get_map(),2,3)
+    # direction = []
+    # print(agent.A_start_find_way(map_of_game.get_map(),direction))
+    # print(direction[::-1] )
+    # my_dict = {i:direction.count(i) for i in direction}
+    # print(my_dict)
+    # print(agent.get_pos())
+    # print(agent.get_virtual_treasure())
+    # print(map_of_game)
 

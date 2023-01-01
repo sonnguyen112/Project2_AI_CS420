@@ -1,4 +1,5 @@
 import random
+from utils import astar
 
 class Map():
     def __init__(self, map):
@@ -79,7 +80,8 @@ class MapGenerateTool():
                 for i in temp_arr:
                     if "M" not in str(map[temp[0]+i[0]][temp[1]+i[1]]) and temp[0]+i[0] > 0 and temp[0]+i[0] < size - 1 and temp[1]+i[1] > 0 and temp[1]+i[1] < size - 1 and map[temp[0]+i[0]][temp[1]+i[1]] != 0:
                         queue.append((temp[0]+i[0], temp[1]+i[1]))
-                        map[temp[0]+i[0]][temp[1]+i[1]] = str(map[temp[0]+i[0]][temp[1]+i[1]]) + "M"
+                        if "M" not in str(map[temp[0]+i[0]][temp[1]+i[1]]):
+                            map[temp[0]+i[0]][temp[1]+i[1]] = str(map[temp[0]+i[0]][temp[1]+i[1]]) + "M"
                         index_mountain += 1
                         if index_mountain == len_mountain:
                             break
@@ -90,11 +92,36 @@ class MapGenerateTool():
             while map[pos[0]][pos[1]] == 0 or "M" in str(map[pos[0]][pos[1]]):
                 pos = (random.randint(1, size-2), random.randint(1, size-2))
             
-            map[pos[0]][pos[1]] = str(map[pos[0]][pos[1]]) + "P"
+            if "P" not in str(map[pos[0]][pos[1]]):
+                map[pos[0]][pos[1]] = str(map[pos[0]][pos[1]]) + "P"
 
         map = Map(map)
         return map
 
-# map_generate = MapGenerateTool()
-# print(map_generate.generate_map(16, 7))
-# print(map_generate.generate_map(16, 7).get_map())
+    def export_file(self, size, file_name, turn_reveal = 2, turn_free = 5, num_region = 7):
+        map = self.generate_map(size, num_region).get_map()
+        treasure_pos = (random.randint(1, size-2), random.randint(1, size-2))
+        while map[treasure_pos[0]][treasure_pos[1]][-1] == "M" or  map[treasure_pos[0]][treasure_pos[1]][-1] == "P" or  map[treasure_pos[0]][treasure_pos[1]][0] == "0":
+            treasure_pos = (random.randint(1, size-2), random.randint(1, size-2))
+        with open(file_name, "w") as file:
+            file.write(f"{size} {size}\n")
+            file.write(f"{turn_reveal}\n")
+            file.write(f"{turn_free}\n")
+            file.write(f"{num_region}\n")
+            file.write(f"{treasure_pos[0]} {treasure_pos[1]}\n")
+            for row in map:
+                file.write(f"{'; '.join(row)}\n")
+
+
+if __name__== "__main__":
+    map_generator = MapGenerateTool()
+    # map_sample = map_generator.generate_map(16, 4)
+    # actual_map = map_sample.get_map()
+    # print(map_sample)
+    # print(map_sample)
+
+    map_generator.export_file(16, "map/map_16x16.txt", turn_reveal=7)
+    map_generator.export_file(32, "map/map_32x32.txt", turn_reveal=10)
+    map_generator.export_file(64, "map/map_64x64.txt", turn_reveal=13)
+    map_generator.export_file(70, "map/map_70x70.txt", turn_reveal=16)
+    map_generator.export_file(74, "map/map_74x74.txt", turn_reveal=20)
