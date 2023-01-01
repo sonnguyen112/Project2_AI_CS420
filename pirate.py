@@ -61,7 +61,7 @@ class Pirate():
                     return False
                 else: 
                     return True
-        elif hint["id"] == 6:
+        elif hint["id"] == 7:
             return True
         else:
             if self.__treasure in hint["val"]:
@@ -76,10 +76,12 @@ class Pirate():
 
     def __set_init_pos(self):
         # Add code
-        pos = (random.randint(1, self.__size - 2), random.randint(1, self.__size - 2))
-        while self.__map[pos[0]][pos[1]][-1] == "M" or self.__map[pos[0]][pos[1]][-1] == "P" or self.__map[pos[0]][pos[1]][0] == "M":  
-            pos = (random.randint(1, self.__size - 2), random.randint(1, self.__size - 2))
-        return pos
+        prisons = []
+        for i in range(len(self.__map)):
+            for j in range(len(self.__map)):
+                if self.__map[i][j][-1] == "P":
+                    prisons.append((i, j))
+        return random.choice(prisons)
 
     def get_pos(self):
         return self.__pos
@@ -245,8 +247,8 @@ class Pirate():
 
     def hint_9(self):
         a = random.randint(0, 2)
-        n = random.randint(0, self.__size)
-        m = random.randint(0, self.__size)
+        n = random.randint(0, self.__size-1)
+        m = random.randint(0, self.__size-1)
         if (a == 0):
             return {
                 "id": 9,

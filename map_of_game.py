@@ -99,6 +99,8 @@ class MapGenerateTool():
         return map
 
     def export_file(self, size, file_name, turn_reveal = 2, turn_free = 5, num_region = 7):
+        if turn_free <= turn_reveal:
+            turn_free = turn_reveal + 3
         map = self.generate_map(size, num_region).get_map()
         treasure_pos = (random.randint(1, size-2), random.randint(1, size-2))
         while map[treasure_pos[0]][treasure_pos[1]][-1] == "M" or  map[treasure_pos[0]][treasure_pos[1]][-1] == "P" or  map[treasure_pos[0]][treasure_pos[1]][0] == "0":
