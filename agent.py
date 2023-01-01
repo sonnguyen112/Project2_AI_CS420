@@ -13,7 +13,7 @@ class Agent():
         self.is_first_turn = True
         self.__virtual_treasure = init_pos
         self.is_know_pirate_pos = False
-        self.__pirate_pos = (0, 0)
+        self.__pirate_pos = None
         self.turn_pirate_free_agent_know=turn_pirate_free
         self.__hint_list_init = []
         self.turn_teleport = 1
@@ -40,6 +40,9 @@ class Agent():
 
     def is_win(self):  # Use to check whether agent win
         return self.__is_win
+
+    def set_pirate_pos(self, pos):
+        self.__pirate_pos = pos
 
     def determine_treasure_location_init(self, hint, game_map):
         if hint["id"] == 1:

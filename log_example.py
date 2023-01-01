@@ -13,40 +13,21 @@ log = {
     "who_win": "agent",
     "machine_turn": [
         {
-            "agent_pos": (0, 0),
-            "list_tiles_not_include_treasure": [(1, 1), (2, 2)],
-            "list_tiles_include_treasure": [(2, 2), (0, 9)],
-            "pirate_pos": (3, 3)  # or None
-        }, {
-            "agent_pos": (6, 8),
-            "list_tiles_not_include_treasure": [(1, 2), (3, 4)],
-            "list_tiles_include_treasure": [(1, 1), (1, 2)],
-            "pirate_pos": (3, 3)  # or None
-        }, {
-            "agent_pos": (2, 10),
-            "list_tiles_not_include_treasure": [(1, 1), (2, 2)],
-            "list_tiles_include_treasure": [(2, 2), (0, 9)],
-            "pirate_pos": (3, 3)  # or None
-        }
-    ],
-    "human_turn": [
-        {
-            "hint": "",
-            "action_1": "",
-            "action_2": "",
-            "which_hint_checked": 1,
-            "is_hint_checked_true": True
-        }, {
-            "hint": "",
-            "action_1": "",
-            "action_2": "",
-            "which_hint_checked": 1,
-            "is_hint_checked_true": True
-        },
-        {
-            "hint": "",
-            "action_1": "",
-            "action_2": "",
+            "action_1":{
+                "list_tiles_not_include_treasure": [(1, 1), (2, 2)],
+                "description": "",
+                "pos" : (0, 0)
+            },
+            "action_2":{
+                "list_tiles_not_include_treasure": [(1, 1), (2, 2)],
+                "description": "",
+                "pos" : (0, 0)
+            },
+            "hint":{
+                "list_tiles" : [(0, 1)],
+                "description" : ""
+            },
+            "pirate_pos": (3, 3),  # or None
             "which_hint_checked": 1,
             "is_hint_checked_true": True
         }
