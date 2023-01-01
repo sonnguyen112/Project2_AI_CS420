@@ -39,6 +39,19 @@ class VisualizationTool():
         self.__list_tiles_include_treasure = []
         self.__all_labels = []
         self.__list_drawn_tile = []
+        self.action_visual_list = []
+        for action_visual in self.__log["machine_turn"]:
+            temp = action_visual["action_1"]
+            temp["hint"] = action_visual["hint"]
+            temp["pirate_pos"] = action_visual["pirate_pos"]
+            self.action_visual_list.append(temp)
+            temp_2 = action_visual["action_2"]
+            temp_2["hint"] = None
+            temp_2["pirate_pos"] = action_visual["pirate_pos"]
+            self.action_visual_list.append(temp_2)
+
+        print(self.action_visual_list)
+        exit(0)
 
     def __close_win(self, e):
         self.__root.destroy()
@@ -194,6 +207,7 @@ END TURN {turn + 1}
                 if index_row == self.__treasure_pos[0] and index_col == self.__treasure_pos[1]:
                     text = label.create_text(int(label["width"]) // 2, int(
                         label["height"]) // 2, text="T", fill="yellow", font=('Helvetica 15 bold'))
+
                 label.grid(row=index_row + 1, column=index_col + 1)
                 row_label.append({
                     "canvas": label,
