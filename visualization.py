@@ -41,17 +41,29 @@ class VisualizationTool():
         self.__list_drawn_tile = []
         self.action_visual_list = []
         for action_visual in self.__log["machine_turn"]:
-            temp = action_visual["action_1"]
-            temp["hint"] = action_visual["hint"]
-            temp["pirate_pos"] = action_visual["pirate_pos"]
-            self.action_visual_list.append(temp)
-            temp_2 = action_visual["action_2"]
-            temp_2["hint"] = None
-            temp_2["pirate_pos"] = action_visual["pirate_pos"]
-            self.action_visual_list.append(temp_2)
 
-        print(self.action_visual_list)
-        exit(0)
+            self.action_visual_list.append({
+                "type" : "hint",
+                "list_tile": action_visual["hint"][0]["list_tiles"],
+                "description": action_visual["hint"][0]["description"],
+                "pos": action_visual["hint"][0]["pos"],
+                "pirate_pos" : action_visual["pirate_pos"]
+            })
+            self.action_visual_list.append({
+                "type": "action_1",
+                "list_not_include": action_visual["action_1"]["list_tiles_not_include_treasure"],
+                "pos": action_visual["action_1"]["pos"],
+                "description": action_visual["action_1"]["description"],
+                "pirate_pos" : action_visual["pirate_pos"]
+            })
+            self.action_visual_list.append({
+                "type": "action_2",
+                "list_not_include": action_visual["action_2"]["list_tiles_not_include_treasure"],
+                "pos": action_visual["action_2"]["pos"],
+                "description": action_visual["action_1"]["description"],
+                "pirate_pos" : action_visual["pirate_pos"]
+            })
+
 
     def __close_win(self, e):
         self.__root.destroy()
@@ -62,14 +74,15 @@ class VisualizationTool():
             self.__update_game()
 
     def __click_right(self, e):
-        if self.__turn < len(self.__log["machine_turn"]):
+        if self.__turn < len(self.action_visual_list):
             self.__turn += 1
             self.__update_game()
 
     def __update_game(self):
+        print(self.__list_drawn_tile)
         for tile in self.__list_drawn_tile:
-            if tile["text"] != None:
-                tile["canvas"].delete(tile["text"])
+            # if tile["text"] != None:
+            #     tile["canvas"].delete(tile["text"])
             tile["canvas"].configure(highlightbackground="white", highlightthickness=1)
             tile["canvas"].configure(bg=self.__color_list[int(self.__map[tile["pos"][0]][tile["pos"][1]][0])])
         self.__list_drawn_tile = []
@@ -87,12 +100,12 @@ Agent appears at [{self.__agent_pos_init[0]},{self.__agent_pos_init[1]}]
 The pirate’s prison is going to reveal the at the beginning of {self.__log["turn_pirate_reveal"]}rd turn
 The pirate is free at the beginning of the {self.__log["turn_pirate_free"]}th turn
 """)    
-        if self.__turn == 0:
-            text = self.__all_labels[self.__agent_pos_init[0]][self.__agent_pos_init[1]]["canvas"].create_text(int(self.__all_labels[self.__agent_pos_init[0]][self.__agent_pos_init[1]]["canvas"]["width"]) // 2, int(
-                            self.__all_labels[self.__agent_pos_init[0]][self.__agent_pos_init[1]]["canvas"]["height"]) // 2, text="A", fill="black", font=('Helvetica 15 bold'))
-            self.__all_labels[self.__agent_pos_init[0]][self.__agent_pos_init[1]]["text"] = text
-            prev_pos_agent = (self.__all_labels[self.__agent_pos_init[0]][self.__agent_pos_init[1]])
-            self.__list_drawn_tile.append(self.__all_labels[self.__agent_pos_init[0]][self.__agent_pos_init[1]])
+        # if self.__turn == 0:
+        #     text = self.__all_labels[self.__agent_pos_init[0]][self.__agent_pos_init[1]]["canvas"].create_text(int(self.__all_labels[self.__agent_pos_init[0]][self.__agent_pos_init[1]]["canvas"]["width"]) // 2, int(
+        #                     self.__all_labels[self.__agent_pos_init[0]][self.__agent_pos_init[1]]["canvas"]["height"]) // 2, text="A", fill="black", font=('Helvetica 15 bold'))
+        #     self.__all_labels[self.__agent_pos_init[0]][self.__agent_pos_init[1]]["text"] = text
+        #     prev_pos_agent = (self.__all_labels[self.__agent_pos_init[0]][self.__agent_pos_init[1]])
+        #     self.__list_drawn_tile.append(self.__all_labels[self.__agent_pos_init[0]][self.__agent_pos_init[1]])
 
         for turn in range(self.__turn):
             # if self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["text"] != None:
@@ -107,58 +120,77 @@ The pirate is free at the beginning of the {self.__log["turn_pirate_free"]}th tu
             # for tile in prev_red_border_list:
             #     self.__all_labels[tile[0]][tile[1]]["canvas"].configure(highlightbackground="white", highlightthickness=1)
             prev_pos_agent["canvas"].delete(prev_pos_agent["text"])
-            machine_log = self.__log["machine_turn"][turn]
-            self.__agent_pos = machine_log["agent_pos"]
-            self.__list_tiles_not_include_treasure = machine_log["list_tiles_not_include_treasure"]
+            if self.__pirate_pos != None:
+                prev_pos_pirate["canvas"].delete(prev_pos_pirate["text"])
+            machine_log = self.action_visual_list[turn]
+            if machine_log["type"] == "hint":
+                self.__agent_pos = machine_log["pos"]
+                if (self.__turn - 1) % 3 == 0:
+                    print("LIST TITLE", machine_log["list_tile"])
+                    for tile in machine_log["list_tile"]:
+                        self.__all_labels[tile[0]][tile[1]]["canvas"].configure(highlightbackground="red", highlightthickness=1)
+                        self.__list_drawn_tile.append(self.__all_labels[tile[0]][tile[1]])
+
+                text = self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["canvas"].create_text(int(self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["canvas"]["width"]) // 2, int(
+                            self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["canvas"]["height"]) // 2, text="A", fill="black", font=('Helvetica 15 bold'))
+                self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["text"] = text
+                prev_pos_agent = (self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]])
+                self.__list_drawn_tile.append(self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]])   
+            else:
+                self.__agent_pos = machine_log["pos"]
+                self.__list_tiles_not_include_treasure = machine_log["list_not_include"]
             # self.__list_tiles_include_treasure = machine_log["list_tiles_include_treasure"]
             # prev_red_border_list = self.__list_tiles_include_treasure
             
 
-            for tile in self.__list_tiles_not_include_treasure:
-                if self.__all_labels[tile[0]][tile[1]]["text"] != None:
-                    self.__all_labels[tile[0]][tile[1]]["canvas"].delete(self.__all_labels[tile[0]][tile[1]]["text"])
-                self.__all_labels[tile[0]][tile[1]]["canvas"].configure(bg="#f5eded")
-                self.__list_drawn_tile.append(self.__all_labels[tile[0]][tile[1]])
+                for tile in self.__list_tiles_not_include_treasure:
+                    # if self.__all_labels[tile[0]][tile[1]]["text"] != None:
+                        # self.__all_labels[tile[0]][tile[1]]["canvas"].delete(self.__all_labels[tile[0]][tile[1]]["text"])
+                    self.__all_labels[tile[0]][tile[1]]["canvas"].configure(bg="#f5eded")
+                    self.__list_drawn_tile.append(self.__all_labels[tile[0]][tile[1]])
 
-            text = self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["canvas"].create_text(int(self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["canvas"]["width"]) // 2, int(
+                text = self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["canvas"].create_text(int(self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["canvas"]["width"]) // 2, int(
                             self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["canvas"]["height"]) // 2, text="A", fill="black", font=('Helvetica 15 bold'))
-            self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["text"] = text
-            prev_pos_agent = (self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]])
-            self.__list_drawn_tile.append(self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]])
+                self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["text"] = text
+                prev_pos_agent = (self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]])
+                self.__list_drawn_tile.append(self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]])
 
-            self.__pirate_pos = machine_log["pirate_pos"]
-            if self.__pirate_pos != None:
-                text = self.__all_labels[self.__pirate_pos[0]][self.__pirate_pos[1]]["canvas"].create_text(int(self.__all_labels[self.__pirate_pos[0]][self.__pirate_pos[1]]["canvas"]["width"]) // 2, int(
+                self.__pirate_pos = machine_log["pirate_pos"]
+                if self.__pirate_pos != None:
+                    text = self.__all_labels[self.__pirate_pos[0]][self.__pirate_pos[1]]["canvas"].create_text(int(self.__all_labels[self.__pirate_pos[0]][self.__pirate_pos[1]]["canvas"]["width"]) // 2, int(
                             self.__all_labels[self.__pirate_pos[0]][self.__pirate_pos[1]]["canvas"]["height"]) // 2, text="Pi", fill="black", font=('Helvetica 15 bold'))
-                self.__all_labels[self.__pirate_pos[0]][self.__pirate_pos[1]]["text"] = text
-                prev_pos_pirate = (self.__all_labels[self.__pirate_pos[0]][self.__pirate_pos[1]])
-                self.__list_drawn_tile.append(self.__all_labels[self.__pirate_pos[0]][self.__pirate_pos[1]])
+                    self.__all_labels[self.__pirate_pos[0]][self.__pirate_pos[1]]["text"] = text
+                    prev_pos_pirate = (self.__all_labels[self.__pirate_pos[0]][self.__pirate_pos[1]])
+                    self.__list_drawn_tile.append(self.__all_labels[self.__pirate_pos[0]][self.__pirate_pos[1]])
 
             # for tile in self.__list_tiles_include_treasure:
             #     self.__all_labels[tile[0]][tile[1]]["canvas"].configure(highlightbackground="red", highlightthickness=1)
             #     self.__list_drawn_tile.append(self.__all_labels[tile[0]][tile[1]])
 
-            human_log = self.__log["human_turn"][turn]
-            self.__log_text.insert(INSERT, f"""\
+#             human_log = self.__log["human_turn"][turn]
+            if machine_log["type"] == "hint":
+                self.__log_text.insert(INSERT, f"""\
 START TURN {turn + 1}
 """)        
             if machine_log["pirate_pos"] != None:
                 self.__log_text.insert(INSERT, f"""\
 The pirate is at the ({machine_log["pirate_pos"][0]}, {machine_log["pirate_pos"][1]}) prison
 """)        
-            self.__log_text.insert(INSERT, f"""\
-HINT {turn + 1}: {human_log["hint"]["description"]}
+            if machine_log["type"] == "hint":
+                self.__log_text.insert(INSERT, f"""\
+HINT {turn + 1}: {machine_log["description"]}
 ADD HINT{turn + 1} TO HINT LIST
 """)
             if turn + 1 == 1:
                 self.__log_text.insert(INSERT, f"""\
 HINT1: is_verified = TRUE, is_truth = TRUE
 """)        
-            self.__log_text.insert(INSERT, f"""\
-{human_log["action_1"]}
-{human_log["action_2"]}
-""")        
-            self.__log_text.insert(INSERT, f"""\
+            if machine_log["type"] != "hint":
+                self.__log_text.insert(INSERT, f"""\
+{machine_log["description"]}
+# """)        
+            if machine_log["type"] == "action_2":
+                self.__log_text.insert(INSERT, f"""\
 END TURN {turn + 1}
 """)        
         self.__log_text.configure(state="disable")
