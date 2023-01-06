@@ -194,12 +194,12 @@ class Agent():
             if obtain_list == []:
                 self.__hint_list_true += (self.__hint_list_init)
                 return random.choice(self.__hint_list_true)
-            print("khoi dep trai")
-            print(obtain_list)
+         
+          
 
             self.__hint_list_true += obtain_list
-            print("khoi sieu dep trai")
-            print(self.__hint_list_true)
+           
+   
             return random.choice(obtain_list)
         if hint["id"] == 16:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
@@ -893,16 +893,14 @@ class Agent():
 
                 self.receive_hint(hint, map, num_action_rest,action_infor)
                 direction = []
-                print("khoi vo dich")
-                print(self.__hint_list_true)
+        
                 way_to_treasure = self.A_start_find_way(map, direction)
                 direction = direction[::-1]
                 remain = 0
                 remain2 = 0
                 steps = 0
                 
-                print("bat tu")
-                print(self.__hint_list_true)
+            
                 print("way to treasure")
                 print(way_to_treasure)
                 print(self.__pos)
@@ -951,8 +949,7 @@ class Agent():
                                     num_action_rest = num_action_rest-1
                                 elif i <= 3:
                                     steps = i
-                                    # print("khoi hoan hao")
-                                    # print(remain + sum_of_direction)
+                                  
                                     self.__pos = way_to_treasure[remain + i-1]
                                     remain = remain+i
                                     action_infor.append({
@@ -965,8 +962,7 @@ class Agent():
                                     dir_of_agent.pop(0)
                                     num_action_rest = num_action_rest-1
                                 else:
-                                    # print("khoi hoan hao")
-                                    # print(remain + sum_of_direction)
+                                  
                                     self.__pos = way_to_treasure[remain + 4-1]
                                     remain = remain+4
                                     action_infor.append({
@@ -1031,8 +1027,7 @@ class Agent():
                 #                             num_action_rest=num_action_rest-1
                 #                         else :
                 #                             steps = sum_of_direction
-                #                             # print("khoi hoan hao")
-                #                             # print(remain + sum_of_direction)
+                #                         
                 #                             self.__pos=way_to_treasure[remain + sum_of_direction-1]
                 #                             remain=remain+sum_of_direction
                 #                             self.action_list.append(3)

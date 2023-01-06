@@ -8,7 +8,10 @@ def heuristic(a, b):
  
 
 def astar(array, start, goal):
-
+    print("start")
+    print(start)
+    print("goal")
+    print(goal)
     array = np.asarray(array)
 
     neighbors = [(0,1),(0,-1),(1,0),(-1,0)]
