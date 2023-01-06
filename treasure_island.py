@@ -20,7 +20,7 @@ class TreasureIslandGame():
         self.__agent = Agent(agent_pos_init, self.__game_map,
                              self.__turn_reveal, self.__turn_free)
         self.__pirate = Pirate(
-            self.__game_map, self.__turn_reveal, self.__turn_free, self.__agent.get_pos())
+            self.__game_map, self.__turn_reveal, self.__turn_free, self.__agent.get_pos(),self.__treasure_pos,self.__num_region)
         self.__turn = 1
 
     def __load_map(self, map_file):
@@ -59,6 +59,8 @@ class TreasureIslandGame():
                 hint = self.__pirate.give_hint(self.__turn)
                 print("HINT", hint)
                 agent_actions = self.__agent.action(hint, self.__game_map)
+                print("agent_action")
+                print(agent_actions)
                 self.__pirate.set_agent_pos(self.__agent.get_pos())
                 print("AGENT ACTION", agent_actions)
                 pirate_pos = self.__pirate.action(self.__turn)

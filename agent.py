@@ -215,8 +215,8 @@ class Agent():
         pass
 
     def small_scan(self, game_map):
-        y = self.get_pos()[0]
-        x = self.get_pos()[1]
+        y = self.get_pos()[1]
+        x = self.get_pos()[0]
         obtain_list = []
         for x_ in range(x-1, x+2):
             for y_ in range(y-1, y+2):
@@ -230,8 +230,8 @@ class Agent():
                 filter(lambda x: x not in obtain_list, self.__hint_list_true))
 
     def stay_large_scan(self, hint, map):
-        y = self.get_pos()[0]
-        x = self.get_pos()[1]
+        y = self.get_pos()[1]
+        x = self.get_pos()[0]
         obtain_list = []
         for x_ in range(x-2, x+3):
             for y_ in range(y-2, y+3):
@@ -807,7 +807,6 @@ class Agent():
         if self.is_first_turn:
             self.__virtual_treasure = self.determine_treasure_location_init(
                 hint, map)
-            print("Khoi hoan hao")
             print(self.__hint_list_true)
             self.is_first_turn = False
         else:
