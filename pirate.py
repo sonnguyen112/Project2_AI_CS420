@@ -13,22 +13,22 @@ class Pirate():
         self.__treasureRegion = 2
         self.__regions = 7
         self.__hint_dict = {
-            # 1: self.hint_1(),
+            1: self.hint_1(),
             # 2: self.hint_2(),
             3: self.hint_3(),
-            # 4: self.hint_4(),
+            4: self.hint_4(),
             5: self.hint_5(),
-            # 6: self.hint_6(),
-            # 7: self.hint_7(),
+            6: self.hint_6(),
+            7: self.hint_7(),
             8: self.hint_8(),
-            # 9: self.hint_9(),
-            # 10: self.hint_10(),
+            9: self.hint_9(),
+            10: self.hint_10(),
             # 11: self.hint_11(),
             # 12: self.hint_12(),
-            # 13: self.hint_13(),
+            13: self.hint_13(),
             # 14: self.hint_14(),
-            # 15: self.hint_15(),
-            # 16: self.hint_16(),
+            15: self.hint_15(),
+            16: self.hint_16(),
 
             # Add code
         }
@@ -37,38 +37,107 @@ class Pirate():
         self.__index_path = 0
         self.__turn = 1
 
-    
+    def check_boundary(self, re1,re2):
+        tiles = []
+        for x in range(1,self.__size -1):
+            for y in range(1,self.__size-1):
+                if ( str(re1) in self.__map[x][y]):
+                    if( str(re2) in self.__map[x-1][y] or str(re2) in self.__map[x+1][y] or str(re2) in self.__map[x][y-1] or str(re2) in self.__map[x][y+1]):
+                        tiles.append((x,y))
+                elif(str(re2) in self.__map[x][y]):
+                    if( str(re1) in self.__map[x][y-1] or str(re1) in self.__map[x][y+1] or str(re1) in self.__map[x][y-1] or str(re1) in self.__map[x][y+1]):
+                        tiles.append((x,y))
+        for y in range(1,self.__size-1):
+            x = 0
+            if ( str(re1) in self.__map[x][y]):
+                if(str(re2) in self.__map[x+1][y] or str(re2) in self.__map[x][y-1] or str(re2) in self.__map[x][y+1]):
+                        tiles.append((x,y))
+            elif(str(re2) in self.__map[x][y]):
+                if(str(re1) in self.__map[x+1][y] or str(re1) in self.__map[x][y-1] or str(re1) in self.__map[x][y+1]):
+                        tiles.append((x,y))
+
+            x = self.__size -1
+            if ( str(re1) in self.__map[x][y]):
+                if(str(re2) in self.__map[x-1][y] or str(re2) in self.__map[x][y-1] or str(re2) in self.__map[x][y+1]):
+                        tiles.append((x,y))
+            elif(str(re2) in self.__map[x][y]):
+                if(str(re1) in self.__map[x-1][y] or str(re1) in self.__map[x][y-1] or str(re1) in self.__map[x][y+1]):
+                        tiles.append((x,y))
+        
+        for x in range(1,self.__size):
+            y = 0
+            if ( str(re1) in self.__map[x][y]):
+                if(str(re2) in self.__map[x+1][y] or str(re2) in self.__map[x-1][y] or str(re2) in self.__map[x][y+1]):
+                        tiles.append((x,y))
+            elif(str(re2) in self.__map[x][y]):
+                if(str(re1) in self.__map[x+1][y] or str(re1) in self.__map[x-1][y] or str(re1) in self.__map[x][y+1]):
+                        tiles.append((x,y))
+            y = self.__size -1
+            if ( str(re1) in self.__map[x][y]):
+                if(str(re2) in self.__map[x+1][y] or str(re2) in self.__map[x-1][y] or str(re2) in self.__map[x][y-1]):
+                        tiles.append((x,y))
+            elif(str(re2) in self.__map[x][y]):
+                if(str(re1) in self.__map[x+1][y] or str(re1) in self.__map[x-1][y] or str(re1) in self.__map[x][y-1]):
+                        tiles.append((x,y))
+        x = 0
+        y = 0
+        if(str(re1) in self.__map[x][y]):
+            if(str(re2) in self.__map[x+1][y] or str(re2) in self.__map[x][y+1]):
+                tiles.append((x,y))
+        elif(str(re2) in self.__map[x][y]):
+            if(str(re1) in self.__map[x+1][y] or str(re1) in self.__map[x][y+1]):
+                tiles.append((x,y))
+        x = 0 
+        y = self.__size - 1
+        if(str(re1) in self.__map[x][y]):
+            if(str(re2) in self.__map[x+1][y] or str(re2) in self.__map[x][y-1]):
+                tiles.append((x,y))
+        elif(str(re2) in self.__map[x][y]):
+            if(str(re1) in self.__map[x+1][y] or str(re1) in self.__map[x][y-1]):
+                tiles.append((x,y))
+        x = self.__size - 1 
+        y = self.__size - 1
+        if(str(re1) in self.__map[x][y]):
+            if(str(re2) in self.__map[x-1][y] or str(re2) in self.__map[x][y-1]):
+                tiles.append((x,y))
+        elif(str(re2) in self.__map[x][y]):
+            if(str(re1) in self.__map[x-1][y] or str(re1) in self.__map[x][y-1]):
+                tiles.append((x,y))
+        x = self.__size - 1 
+        y = 0
+        if(str(re1) in self.__map[x][y]):
+            if(str(re2) in self.__map[x-1][y] or str(re2) in self.__map[x][y+1]):
+                tiles.append((x,y))
+        elif(str(re2) in self.__map[x][y]):
+            if(str(re1) in self.__map[x-1][y] or str(re1) in self.__map[x][y+1]):
+                tiles.append((x,y))
+        return tiles
+
     def check_hint(self,hint):
-        if hint["id"] == 8:
-            if "col" not in hint["val"]:
-                if self.__treasure[0] == hint["val"]["row"]:
-                    return True
-                else : 
+        if hint["id"] == 7:
+            a = (self.__treasure[0] - self.__pos[0] )*(self.__treasure[0] - self.__pos[0]) + (self.__treasure[1] - self.__pos[1] )*(self.__treasure[1] + self.__pos[1])
+            b = (self.__treasure[0] - self.__agent_pos[0] )*(self.__treasure[0] - self.__agent_pos[0]) + (self.__treasure[1] - self.__agent_pos[1] )*(self.__treasure[1] - self.__agent_pos[1]) 
+            if ( a > b):
+                if (hint["val"] == 0):
                     return False
-            if "row" not in hint["val"]:
-                if self.__treasure[1] == hint["val"]["col"]:
+                else:
                     return True
-                else: 
-                    return False
-        elif hint["id"] == 9:
-            if "col" not in hint["val"]:
-                if self.__treasure[0] == hint["val"]["row"]:
-                    return False
-                else : 
+            else:
+                if (hint["val"] == 0):
                     return True
-            if "row" not in hint["val"]:
-                if self.__treasure[1] == hint["val"]["col"]:
+                else:
                     return False
-                else: 
-                    return True
-        elif hint["id"] == 6:
-            return True
+        elif ( hint["id"] in [1,4,6,9,13]):
+            if self.__treasure  not in hint["val"]:
+                return True
+            else:
+                return False
         else:
             if self.__treasure in hint["val"]:
                 return True
             else:
                 return False
-        return False
+
 
 
     def set_agent_pos(self, agent_pos):
@@ -189,10 +258,10 @@ class Pirate():
         }
 
     def hint_6(self):
-        n1 = random.randint(self.__size // 4, self.__size // 2) - 1
-        n2 = random.randint(self.__size // 4, self.__size // 2) - 1
-        m1 = random.randint(self.__size // 2, self.__size*3 // 4) - 1
-        m2 = random.randint(self.__size // 2, self.__size*3 // 4) - 1
+        n1 = random.randint((self.__size -1) // 4, (self.__size -1) // 2) 
+        n2 = random.randint((self.__size -1) // 4, (self.__size -1) // 2) 
+        m1 = random.randint((self.__size -1) // 2, (self.__size -1)*3 // 4) 
+        m2 = random.randint((self.__size -1) // 2, (self.__size -1)*3 // 4) 
         tiles = []
         for x in range(n1, m1+1):
             for y in range(n2, m2+1):
@@ -205,11 +274,16 @@ class Pirate():
         }
 
     def hint_7(self):
-
+        a = random.randint(0,1)
+        b = ""
+        if ( a == 0):
+            b = "Pirate"
+        else:
+            b = "You"
         return {
             "id": 7,
-            "val": [],
-            "description": "The agent receives the first hint: “Region number 2 does not has treasure:"
+            "val": a,
+            "description":  b +" are the nearest person to the treasure."
         }
 
     def hint_8(self):
@@ -218,28 +292,29 @@ class Pirate():
         n = random.randint(0, self.__size)
         m = random.randint(0, self.__size)
         if (a == 0):
+            titles = []
+            for i in range(self.__size):
+                titles.append(m,i)
+                titles.append(i,n)            
             return {
                 "id": 8,
-                "val": {
-                    "col": n,
-                    "row": m
-                },
+                "val": titles,
                 "description": "A column and a row that contain the treasure:" + str((m,n))
             }
         if (a == 1):
+            for i in range(self.__size):
+                titles.append(i,n) 
             return {
                 "id": 8,
-                "val": {
-                    "col": n,
-                },
+                "val":titles,
                 "description": "A column that contain the treasure:" + str(n)
             }
         if (a == 2):
+            for i in range(self.__size):
+                titles.append(m,i)
             return {
                 "id": 8,
-                "val": {
-                    "row": m
-                },
+                "val":titles,
                 "description": "A row that contain the treasure:" + str(m)
             }
 
@@ -248,28 +323,29 @@ class Pirate():
         n = random.randint(0, self.__size)
         m = random.randint(0, self.__size)
         if (a == 0):
+            titles = []
+            for i in range(self.__size):
+                titles.append(m,i)
+                titles.append(i,n)            
             return {
-                "id": 9,
-                "val": {
-                    "col": n,
-                    "row": m
-                },
+                "id": 8,
+                "val": titles,
                 "description": "A column and a row that do not contain the treasure:" + str((m,n))
             }
         if (a == 1):
+            for i in range(self.__size):
+                titles.append(i,n) 
             return {
-                "id": 9,
-                "val": {
-                    "col": n,
-                },
+                "id": 8,
+                "val":titles,
                 "description": "A column that do not contain the treasure:" + str(n)
             }
         if (a == 2):
+            for i in range(self.__size):
+                titles.append(m,i)
             return {
-                "id": 9,
-                "val": {
-                    "row": m
-                },
+                "id": 8,
+                "val":titles,
                 "description": "A row that do not contain the treasure:" + str(m)
             }
 
@@ -278,26 +354,38 @@ class Pirate():
         m = random.randint(0, self.__regions)
         while (m == n):
             m = random.randint(0, self.__regions)
+        tiles = self.check_boundary(self,m,n)
         return {
             "id": 10,
-            "val": [m, n],
-            "description": "Two 2 regions that the treasure is somewhere in their boundary is: "
+            "val": tiles,
+            "description": "Two 2 regions that the treasure is somewhere in their boundary" + str((m,n))
+
         }
 
     def hint_11(self):
-        # Add code
+        tiles = []
+        for x in range(1, self.__regions):
+            for y in range(x,self.__regions+1):
+                tiles += self.check_boundary(self,x,y)
+        tiles = list(dict.fromkeys(tiles))
         return {
             "id": 11,
-            "val": [],
-            "description": "The agent receives the first hint: “Region number 2 does not has treasure"
+            "val": tiles,
+            "description": "The treasure is somewhere in a boundary of 2 regions"
         }
 
     def hint_12(self):
-        # Add code
+        tile = []
+        tile_0 = []
+        for x in range(1, self.__regions):
+            tile += self.check_boundary(self,x,0)
+        for i in tile:
+            if self.__map[i[0]][i[1]] == "0":
+                tile_0.append(i)
         return {
             "id": 12,
-            "val": [],
-            "description": "The agent receives the first hint: “Region number 2 does not has treasure"
+            "val": tile_0,
+            "description": "The treasure is somewhere in an area bounded by 1 tiles from sea"
         }
 
     def hint_13(self):
@@ -351,11 +439,16 @@ class Pirate():
         }
 
     def hint_16(self):
-        tiles = []
+        re_have_M = []
         for x in range(self.__size):
             for y in range(self.__size):
                 if 'M' in self.__map[x][y]:
-                    tiles.append((x, y))
+                    re_have_M.append (self.__map[x][y][0])
+        tiles= []
+        for x in range(self.__size):
+            for y in range(self.__size):
+                if self.__map[x][y][0] in re_have_M:
+                    tiles.append (self.__map[x][y])
         return {
             "id": 16,
             "val": tiles,
