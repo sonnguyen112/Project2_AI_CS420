@@ -15,20 +15,20 @@ class Pirate():
         self.__hint_dict = {
             1: self.hint_1(),
             # # 2: self.hint_2(),
-            3: self.hint_3(),
+            # 3: self.hint_3(),
             4: self.hint_4(),
             5: self.hint_5(),
             6: self.hint_6(),
-            7: self.hint_7(),
+            # 7: self.hint_7(),
             8: self.hint_8(),
             9: self.hint_9(),
             10: self.hint_10(),
             11: self.hint_11(),
             12: self.hint_12(),
             13: self.hint_13(),
-            # # 14: self.hint_14(),
+            # 14: self.hint_14(),
             15: self.hint_15(),
-            16: self.hint_16(),
+            # 16: self.hint_16(),
 
             # Add code
         }
@@ -51,7 +51,7 @@ class Pirate():
                     if( str(re2) in self.__map[x-1][y] or str(re2) in self.__map[x+1][y] or str(re2) in self.__map[x][y-1] or str(re2) in self.__map[x][y+1]):
                         tiles.append((x,y))
                 elif(str(re2) in self.__map[x][y]):
-                    if( str(re1) in self.__map[x][y-1] or str(re1) in self.__map[x][y+1] or str(re1) in self.__map[x][y-1] or str(re1) in self.__map[x][y+1]):
+                    if( str(re1) in self.__map[x-1][y] or str(re1) in self.__map[x+1][y] or str(re1) in self.__map[x][y-1] or str(re1) in self.__map[x][y+1]):
                         tiles.append((x,y))
         for y in range(1,self.__size-1):
             x = 0
@@ -70,7 +70,7 @@ class Pirate():
                 if(str(re1) in self.__map[x-1][y] or str(re1) in self.__map[x][y-1] or str(re1) in self.__map[x][y+1]):
                         tiles.append((x,y))
         
-        for x in range(1,self.__size-1):
+        for x in range(1,self.__size-1 -1):
             y = 0
             if ( str(re1) in self.__map[x][y]):
                 if(str(re2) in self.__map[x+1][y] or str(re2) in self.__map[x-1][y] or str(re2) in self.__map[x][y+1]):
@@ -133,7 +133,7 @@ class Pirate():
                     return True
                 else:
                     return False
-        elif ( hint["id"] in [1,4,6,9,13]):
+        elif ( hint["id"] in [1,2,4,6,9,13]):
             if self.__treasure  not in hint["val"]:
                 return True
             else:
@@ -175,9 +175,9 @@ class Pirate():
         if len(list(self.__hint_dict.items())) == 0:
             return None
         key, val = random.choice(list(self.__hint_dict.items()))
-        # if turn == 1:
-        #     while self.check_hint(val) == False:
-        #         key, val = random.choice(list(self.__hint_dict.items()))
+        if turn == 1:
+            while self.check_hint(val) == False:
+                key, val = random.choice(list(self.__hint_dict.items()))
         del self.__hint_dict[key]
         return val
 
@@ -206,6 +206,22 @@ class Pirate():
             "id": 1,
             "val": list_tile,
             "description": "A list of random tiles that doesn't contain the treasure:" + a
+        }
+    
+    def hint_2(self):
+        list_tile = []
+        n = random.randint(0, self.__size)
+        m = random.randint(0, self.__size)
+        size = random.randint(1, 12)
+        while ((n, m) not in list_tile and len(list_tile) < size and (n, m) != self.__treasure):
+            list_tile.append((n, m))
+            n = random.randint(0, self.__size)
+            m = random.randint(0, self.__size)
+        a = ','.join(str(e) for e in list_tile)
+        return {
+            "id": 1,
+            "val": list_tile,
+            "description": "A list of random tiles that contain the treasure:" + a
         }
 
     def hint_3(self):
@@ -365,7 +381,7 @@ class Pirate():
         while (m == n):
             m = random.randint(1, self.__regions-1)
         tiles = self.check_boundary(m,n)
-        tiles += self.check_boundary(n,m)
+        #tiles += self.check_boundary(n,m)
         return {
             "id": 10,
             "val": tiles,
@@ -376,7 +392,7 @@ class Pirate():
     def hint_11(self):
         tiles = []
         for x in range(1, self.__regions-1):
-            for y in range(x,self.__regions):
+            for y in range(x +1,self.__regions):
                 tiles += self.check_boundary(x,y)
                 # tiles += self.check_boundary(y,x)
         # tiles = list(dict.fromkeys(tiles))
@@ -404,20 +420,20 @@ class Pirate():
         a = random.randint(0, 3)
         tiles = []
         if (a == 0):
-            for x in range(0, self.__size//2):
+            for x in range(0, self.__size):
                 for y in range(0, self.__size//2):
                     tiles.append((x, y))
         if (a == 1):
-            for x in range(0, self.__size//2):
+            for x in range(0, self.__size):
                 for y in range(self.__size//2, self.__size):
                     tiles.append((x, y))
         if (a == 2):
             for x in range(self.__size//2, self.__size):
-                for y in range(0, self.__size//2):
+                for y in range(0, self.__size):
                     tiles.append((x, y))
         if (a == 3):
-            for x in range(self.__size//2, self.__size):
-                for y in range(self.__size//2, self.__size):
+            for x in range(0, self.__size//2):
+                for y in range(0, self.__size):
                     tiles.append((x, y))
         return {
             "id": 13,

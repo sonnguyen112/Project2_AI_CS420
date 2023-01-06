@@ -231,6 +231,8 @@ class Agent():
         if self.__is_win != True:
             self.__hint_list_true = list(
                 filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
+        self.first_turn_check_hint.clear()
+        self.first_turn_check_hint = obtain_list
 
     def stay_large_scan(self, hint, map):
         y = self.get_pos()[1]
@@ -247,6 +249,8 @@ class Agent():
             self.__hint_list_true = list(
                 filter(lambda x: x not in obtain_list and map[x[0]][x[1]][-1] != '0' and map[x[0]]
                                [x[1]][-1] != 'M' and map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
+        self.first_turn_check_hint.clear()
+        self.first_turn_check_hint = obtain_list
 
     def is_change_virtual_treasure(self, current_obtain_list):
         if self.__virtual_treasure not in current_obtain_list:
@@ -269,24 +273,24 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true = self.intersection(
                         self.__hint_list_true, obtain_list)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
 
             if self.__virtual_treasure not in self.__hint_list_true:
@@ -303,24 +307,24 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true = list(
                         filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -341,24 +345,24 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true = list(
                         filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -378,24 +382,24 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true = self.intersection(
                         self.__hint_list_true, obtain_list)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -415,19 +419,19 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true = list(
                         filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
@@ -451,24 +455,24 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true = self.intersection(
                         self.__hint_list_true, obtain_list)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -492,24 +496,24 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true = list(
                         filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -529,12 +533,12 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure": list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
@@ -542,12 +546,12 @@ class Agent():
                         filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -568,19 +572,19 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true = self.intersection(
                         self.__hint_list_true, obtain_list)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
@@ -600,12 +604,12 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
@@ -613,12 +617,12 @@ class Agent():
                         filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure": obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -634,12 +638,12 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
@@ -647,12 +651,12 @@ class Agent():
                         filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -668,12 +672,12 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
@@ -681,12 +685,12 @@ class Agent():
                         filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure": obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -707,24 +711,24 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure": obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true = self.intersection(
                         self.__hint_list_true, obtain_list)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -740,12 +744,12 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
@@ -753,12 +757,12 @@ class Agent():
                         filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -774,12 +778,12 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
@@ -787,12 +791,12 @@ class Agent():
                         filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -808,12 +812,12 @@ class Agent():
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in obtain_list, self.__hint_list_true)),
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is True",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": True,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                 else:
                     num_action_rest = num_action_rest-1
@@ -821,12 +825,12 @@ class Agent():
                         filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
                                [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
                     action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  obtain_list,
                             "description": f"The agent verify hint {hint['id']}, {hint['id']} is False",
                             "pos": self.__pos,
                             "which_hint_checked": hint["id"],
                             "is_hint_checked_true": False,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -908,9 +912,140 @@ class Agent():
  # count down agent turn
     def action(self, hint, map):
         if (hint == None):
+            if self.is_change_virtual_treasure(self.__hint_list_true):
+                    self.__virtual_treasure = random.choice(self.__hint_list_true)
             for x in self.__hint_list_true:
                 if map[x[0]][x[1]][-1] == 'T':
                     self.__is_win = True
+            num_action_rest = 2
+            steps = 0
+            dir_of_agent = []
+            action_infor = []
+            while num_action_rest > 0:
+
+                if self.is_change_virtual_treasure(self.__hint_list_true):
+                    self.__virtual_treasure = random.choice(self.__hint_list_true)
+                direction = []
+        
+                way_to_treasure = self.A_start_find_way(map, direction)
+                direction = direction[::-1]
+                remain = 0
+                remain2 = 0
+                steps = 0
+                
+            
+                print("way to treasure")
+                print(way_to_treasure)
+                print(self.__pos)
+                print(self.__virtual_treasure)
+                print("direction")
+                print(direction)
+                if way_to_treasure != False:
+                    summary_list_dir = self.get_count(direction)
+                    for i in summary_list_dir:
+                        if direction[remain2] == (1, 0):
+                            dir_of_agent.append("south")
+                        if direction[remain2] == (-1, 0):
+                            dir_of_agent.append("north")
+                        if direction[remain2] == (0, 1):
+                            dir_of_agent.append("east")
+                        if direction[remain2] == (0, -1):
+                            dir_of_agent.append("west")
+                        remain2 = remain2 + i - 1
+                        if num_action_rest > 0:
+                            if self.__pos == self.__virtual_treasure:
+                                self.stay_large_scan
+                                action_infor.append({
+                                    "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                                    "description": "The agent perform a LARGE SCAN",
+                                    "pos": self.__pos,
+                                    "which_hint_checked": None,
+                                    "is_hint_checked_true": None,
+                                    "is_win": self.is_win()
+                                })
+                                num_action_rest = num_action_rest-1
+                            else:
+                                if i <= 2:
+                                    steps = i
+                                    # print(remain + sum_of_direction)
+                                    self.__pos = way_to_treasure[remain + i-1]
+                                    remain = remain+i
+
+                                    self.small_scan(map)
+                                    action_infor.append({
+                                    "list_tiles_not_include_treasure":  self.first_turn_check_hint,
+                                    "description":  f"The agent moves {steps} steps to the {dir_of_agent[0]} and SMALL SCAN",
+                                    "pos": self.__pos,
+                                    "which_hint_checked": None,
+                                    "is_hint_checked_true": None,
+                                    "is_win": self.is_win()
+                                    })
+                                    dir_of_agent.pop(0)
+                                    num_action_rest = num_action_rest-1
+                                elif i <= 3:
+                                    steps = i
+                                  
+                                    self.__pos = way_to_treasure[remain + i-1]
+                                    remain = remain+i
+                                    action_infor.append({
+                                    "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                                    "description": f"The agent moves {steps} steps to the {dir_of_agent[0]}",
+                                    "pos": self.__pos,
+                                    "which_hint_checked": None,
+                                    "is_hint_checked_true": None,
+                                    "is_win": self.is_win()
+                                })
+                                    dir_of_agent.pop(0)
+                                    num_action_rest = num_action_rest-1
+                                else:
+                                  
+                                    self.__pos = way_to_treasure[remain + 4-1]
+                                    remain = remain+4
+                                    action_infor.append({
+                                    "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                                    "description": f"The agent moves 4 steps to the {dir_of_agent[0]}",
+                                    "pos": self.__pos,
+                                    "which_hint_checked": None,
+                                    "is_hint_checked_true": None,
+                                    "is_win": self.is_win()
+                                })
+                                    dir_of_agent.pop(0)
+                                    num_action_rest = num_action_rest-1
+                    if num_action_rest > 0:
+                        self.stay_large_scan
+                        action_infor.append({
+                                "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                                "description": "The agent perform a LARGE SCAN",
+                                "pos": self.__pos,
+                                "which_hint_checked": None,
+                                "is_hint_checked_true": None,
+                                "is_win": self.is_win()
+                            })
+                        num_action_rest = num_action_rest-1
+                else:
+                    if num_action_rest > 0:
+                        self.stay_large_scan
+                        action_infor.append({
+                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "description": "The agent perform a LARGE SCAN",
+                            "pos": self.__pos,
+                            "which_hint_checked": None,
+                            "is_hint_checked_true": None,
+                            "is_win": self.is_win()
+                        })
+                        num_action_rest = num_action_rest-1
+            action_1 = action_infor.pop(0)
+            action_2 = action_infor.pop(0)
+            self.action_list.clear()
+            return {
+                "action_1": 
+                    action_1
+                ,
+                "action_2": 
+                    action_2
+                ,
+            }
+
         else:
             if self.turn_pirate_free_agent_know == 0 and self.turn_teleport > 0:
                 if self.heuristic(self.__pirate_pos, self.__virtual_treasure) < self.heuristic(self.__pos, self.__virtual_treasure):
@@ -960,7 +1095,7 @@ class Agent():
                                     "pos": self.__pos,
                                     "which_hint_checked": None,
                                     "is_hint_checked_true": None,
-                                    "is_win": self.is_win
+                                    "is_win": self.is_win()
                                 })
                                 num_action_rest = num_action_rest-1
                             else:
@@ -972,12 +1107,12 @@ class Agent():
 
                                     self.small_scan(map)
                                     action_infor.append({
-                                    "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                                    "list_tiles_not_include_treasure":  self.first_turn_check_hint,
                                     "description":  f"The agent moves {steps} steps to the {dir_of_agent[0]} and SMALL SCAN",
                                     "pos": self.__pos,
                                     "which_hint_checked": None,
                                     "is_hint_checked_true": None,
-                                    "is_win": self.is_win
+                                    "is_win": self.is_win()
                                     })
                                     dir_of_agent.pop(0)
                                     num_action_rest = num_action_rest-1
@@ -992,7 +1127,7 @@ class Agent():
                                     "pos": self.__pos,
                                     "which_hint_checked": None,
                                     "is_hint_checked_true": None,
-                                    "is_win": self.is_win
+                                    "is_win": self.is_win()
                                 })
                                     dir_of_agent.pop(0)
                                     num_action_rest = num_action_rest-1
@@ -1006,31 +1141,31 @@ class Agent():
                                     "pos": self.__pos,
                                     "which_hint_checked": None,
                                     "is_hint_checked_true": None,
-                                    "is_win": self.is_win
+                                    "is_win": self.is_win()
                                 })
                                     dir_of_agent.pop(0)
                                     num_action_rest = num_action_rest-1
                     if num_action_rest > 0:
                         self.stay_large_scan
                         action_infor.append({
-                                "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                                "list_tiles_not_include_treasure":  self.first_turn_check_hint,
                                 "description": "The agent perform a LARGE SCAN",
                                 "pos": self.__pos,
                                 "which_hint_checked": None,
                                 "is_hint_checked_true": None,
-                                "is_win": self.is_win
+                                "is_win": self.is_win()
                             })
                         num_action_rest = num_action_rest-1
                 else:
                     if num_action_rest > 0:
                         self.stay_large_scan
                         action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                            "list_tiles_not_include_treasure":  self.first_turn_check_hint,
                             "description": "The agent perform a LARGE SCAN",
                             "pos": self.__pos,
                             "which_hint_checked": None,
                             "is_hint_checked_true": None,
-                            "is_win": self.is_win
+                            "is_win": self.is_win()
                         })
                         num_action_rest = num_action_rest-1
 
@@ -1106,10 +1241,22 @@ class Agent():
                 #     self.stay_large_scan
                 #     self.action_list.append(4)
                 #     num_action_rest=num_action_rest-1
-                action_1 = action_infor.pop(0)
-                action_2 = action_infor.pop(0)
+            action_1 = action_infor.pop(0)
+            action_2 = action_infor.pop(0)
             self.action_list.clear()
+    
             if self.is_first_turn:
+                print(
+                    {
+                        "action_1": 
+                            action_1
+                        ,
+                        "action_2": 
+                            action_2
+                        ,
+                        "first_check_hint" : self.first_turn_check_hint
+                    } 
+                )
                 return{
                     "action_1": 
                         action_1
