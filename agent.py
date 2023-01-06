@@ -17,6 +17,7 @@ class Agent():
         self.__pirate_pos = None
         self.turn_pirate_free_agent_know = turn_pirate_free
         self.__hint_list_init = []
+        self.__scan = []
         self.turn_teleport = 1
         self.first_turn_check_hint =[]
         for i in range(len(map)):
@@ -59,10 +60,9 @@ class Agent():
                 for j in range(len(game_map)):
                     if ((i, j) in hint["val"] and game_map[i][j][-1] != '0'):
                         obtain_list.append((i, j))
-
-            self.__hint_list_true = (
-                list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
-            self.first_turn_check_hint = obtain_list
+            self.first_turn_check_hint += obtain_list
+            self.__hint_list_true = (list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
+            
             return random.choice(self.__hint_list_true)
 
         if hint["id"] == 2:
@@ -71,7 +71,7 @@ class Agent():
                 self.__hint_list_true = (list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
                 return random.choice(self.__hint_list_true)
             self.__hint_list_true += (obtain_list)
-            self.first_turn_check_hint =  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
+            self.first_turn_check_hint +=  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
             return random.choice(obtain_list)
         if hint["id"] == 3:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
@@ -79,7 +79,7 @@ class Agent():
                 self.__hint_list_true = (list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
                 return random.choice(self.__hint_list_true)
             self.__hint_list_true += (obtain_list)
-            self.first_turn_check_hint =  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
+            self.first_turn_check_hint +=  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
             return random.choice(obtain_list)
         if hint["id"] == 4:
             obtain_list = []
@@ -97,7 +97,7 @@ class Agent():
                 self.__hint_list_true = (list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
                 return random.choice(self.__hint_list_true)
             self.__hint_list_true += (obtain_list)
-            self.first_turn_check_hint =  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
+            self.first_turn_check_hint +=  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
             return random.choice(obtain_list)
         if hint["id"] == 6:
             obtain_list = []
@@ -121,7 +121,7 @@ class Agent():
             self.__hint_list_true += (obtain_list)
             self.__virtual_treasure = random.choice(
                 self.__hint_list_true)
-            self.first_turn_check_hint =  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
+            self.first_turn_check_hint +=  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
                   
             if self.__virtual_treasure not in self.__hint_list_true:
                 self.__virtual_treasure = random.choice(
@@ -133,7 +133,7 @@ class Agent():
                 self.__hint_list_true = (list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
                 return random.choice(self.__hint_list_true)
             self.__hint_list_true += (obtain_list)
-            self.first_turn_check_hint =  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
+            self.first_turn_check_hint +=  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
             return random.choice(obtain_list)
         if hint["id"] == 9:
             obtain_list = []
@@ -153,7 +153,7 @@ class Agent():
                 list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
                 return random.choice(self.__hint_list_true)
             self.__hint_list_true += (obtain_list)
-            self.first_turn_check_hint =  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
+            self.first_turn_check_hint +=  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
             return random.choice(obtain_list)
         if hint["id"] == 11:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][0] != '0' and game_map[x[0]]
@@ -162,7 +162,7 @@ class Agent():
                 self.__hint_list_true = (list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
                 return random.choice(self.__hint_list_true)
             self.__hint_list_true += (obtain_list)
-            self.first_turn_check_hint =  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
+            self.first_turn_check_hint +=  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
             return random.choice(obtain_list)
         if hint["id"] == 12:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
@@ -170,7 +170,7 @@ class Agent():
                 self.__hint_list_true = (list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
                 return random.choice(self.__hint_list_true)
             self.__hint_list_true += (obtain_list)
-            self.first_turn_check_hint =  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
+            self.first_turn_check_hint +=  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
             return random.choice(obtain_list)
         if hint["id"] == 13:
             obtain_list = []
@@ -189,7 +189,7 @@ class Agent():
                 self.__hint_list_true = (list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
                 return random.choice(self.__hint_list_true)
             self.__hint_list_true += (obtain_list)
-            self.first_turn_check_hint =  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
+            self.first_turn_check_hint +=  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
             return random.choice(obtain_list)
         if hint["id"] == 15:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
@@ -197,12 +197,17 @@ class Agent():
             if obtain_list == []:
                 self.__hint_list_true = (list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
                 return random.choice(self.__hint_list_true)
-         
+
           
 
-            self.__hint_list_true += obtain_list
-            self.first_turn_check_hint =  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
-   
+            self.__hint_list_true = obtain_list
+            self.first_turn_check_hint +=  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
+            print("obtain_list")
+            print(obtain_list)
+            print("__hint_list_true")
+            print(self.__hint_list_true)
+            print("first_turn_check_hint")
+            print(self.first_turn_check_hint)
             return random.choice(obtain_list)
         if hint["id"] == 16:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
@@ -211,7 +216,7 @@ class Agent():
                 self.__hint_list_true = (list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
                 return random.choice(self.__hint_list_true)
             self.__hint_list_true = obtain_list
-            self.first_turn_check_hint =  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
+            self.first_turn_check_hint +=  list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0', self.__hint_list_init))
             return random.choice(obtain_list)
 
     def only_move(self, hint):
@@ -231,8 +236,8 @@ class Agent():
         if self.__is_win != True:
             self.__hint_list_true = list(
                 filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
-        self.first_turn_check_hint.clear()
-        self.first_turn_check_hint = obtain_list
+        self.__scan.clear()
+        self.__scan = obtain_list
 
     def stay_large_scan(self, hint, map):
         y = self.get_pos()[1]
@@ -249,8 +254,8 @@ class Agent():
             self.__hint_list_true = list(
                 filter(lambda x: x not in obtain_list and map[x[0]][x[1]][-1] != '0' and map[x[0]]
                                [x[1]][-1] != 'M' and map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
-        self.first_turn_check_hint.clear()
-        self.first_turn_check_hint = obtain_list
+        self.__scan.clear()
+        self.__scan = obtain_list
 
     def is_change_virtual_treasure(self, current_obtain_list):
         if self.__virtual_treasure not in current_obtain_list:
@@ -969,7 +974,7 @@ class Agent():
 
                                     self.small_scan(map)
                                     action_infor.append({
-                                    "list_tiles_not_include_treasure":  self.first_turn_check_hint,
+                                    "list_tiles_not_include_treasure":  self.__scan,
                                     "description":  f"The agent moves {steps} steps to the {dir_of_agent[0]} and SMALL SCAN",
                                     "pos": self.__pos,
                                     "which_hint_checked": None,
@@ -1103,7 +1108,7 @@ class Agent():
 
                                     self.small_scan(map)
                                     action_infor.append({
-                                    "list_tiles_not_include_treasure":  self.first_turn_check_hint,
+                                    "list_tiles_not_include_treasure":  self.__scan,
                                     "description":  f"The agent moves {steps} steps to the {dir_of_agent[0]} and SMALL SCAN",
                                     "pos": self.__pos,
                                     "which_hint_checked": None,
@@ -1253,6 +1258,7 @@ class Agent():
                         "first_check_hint" : self.first_turn_check_hint
                     } 
                 )
+                self.is_first_turn = False
                 return{
                     "action_1": 
                         action_1
@@ -1262,7 +1268,8 @@ class Agent():
                     ,
                     "first_check_hint" : self.first_turn_check_hint
                 }
-            self.is_first_turn = False
+                
+            
             return {
                 "action_1": 
                     action_1
