@@ -71,6 +71,8 @@ class VisualizationTool():
                 "pirate_pos" : action_visual["pirate_pos"]
             })
         self.__actual_turn = 1
+        self.__draw_red_list = []
+
 
 
     def __close_win(self, e):
@@ -87,6 +89,7 @@ class VisualizationTool():
             self.__update_game()
 
     def __update_game(self):
+        self.__actual_turn = 1
 
         for tile in self.__list_drawn_tile:
             # if tile["text"] != None:
@@ -116,6 +119,9 @@ The pirate is free at the beginning of the {self.__log["turn_pirate_free"]}th tu
         #     self.__list_drawn_tile.append(self.__all_labels[self.__agent_pos_init[0]][self.__agent_pos_init[1]])
 
         for turn in range(self.__turn):
+            for tile in self.__list_drawn_tile:
+                tile["canvas"].configure(highlightbackground="white", highlightthickness=1)
+            self.__list_drawn_tile = []
             # if self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["text"] != None:
             #     self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["canvas"].delete(self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["text"])
             # for tile in self.__list_tiles_include_treasure:
@@ -135,10 +141,13 @@ The pirate is free at the beginning of the {self.__log["turn_pirate_free"]}th tu
             print(machine_log)
             if machine_log["type"] == "hint":
                 self.__agent_pos = machine_log["pos"]
-                if (self.__turn - 1) % 3 == 0:
-                    for tile in machine_log["list_tile"]:
-                        self.__all_labels[tile[0]][tile[1]]["canvas"].configure(highlightbackground="red", highlightthickness=1)
-                        self.__list_drawn_tile.append(self.__all_labels[tile[0]][tile[1]])
+
+
+                for tile in machine_log["list_tile"]:
+                    self.__all_labels[tile[0]][tile[1]]["canvas"].configure(highlightbackground="red", highlightthickness=1)
+                    self.__list_drawn_tile.append(self.__all_labels[tile[0]][tile[1]])
+                    self.__draw_red_list.append(self.__all_labels[tile[0]][tile[1]])
+                        
 
                 text = self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["canvas"].create_text(int(self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["canvas"]["width"]) // 2, int(
                             self.__all_labels[self.__agent_pos[0]][self.__agent_pos[1]]["canvas"]["height"]) // 2, text="A", fill="black", font=('Helvetica 15 bold'))
@@ -148,6 +157,7 @@ The pirate is free at the beginning of the {self.__log["turn_pirate_free"]}th tu
             else:
                 self.__agent_pos = machine_log["pos"]
                 self.__list_tiles_not_include_treasure = machine_log["list_not_include"]
+                
             # self.__list_tiles_include_treasure = machine_log["list_tiles_include_treasure"]
             # prev_red_border_list = self.__list_tiles_include_treasure
             
@@ -204,6 +214,7 @@ END TURN {self.__actual_turn}
 """)      
                 self.__actual_turn += 1
         self.__log_text.configure(state="disable")
+        self.__log_text.see(END)
 
     def __render_map(self):
         for i in range(len(self.__map)+1):
