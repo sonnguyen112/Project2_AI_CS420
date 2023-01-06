@@ -13,22 +13,22 @@ class Pirate():
         self.__treasureRegion = 2
         self.__regions = region_num
         self.__hint_dict = {
-            # 1: self.hint_1(),
+            1: self.hint_1(),
             # # 2: self.hint_2(),
-            # 3: self.hint_3(),
-            # 4: self.hint_4(),
-            # 5: self.hint_5(),
-            # 6: self.hint_6(),
-            # 7: self.hint_7(),
-            # 8: self.hint_8(),
-            # 9: self.hint_9(),
-            # 10: self.hint_10(),
+            3: self.hint_3(),
+            4: self.hint_4(),
+            5: self.hint_5(),
+            6: self.hint_6(),
+            7: self.hint_7(),
+            8: self.hint_8(),
+            9: self.hint_9(),
+            10: self.hint_10(),
             11: self.hint_11(),
-            # 12: self.hint_12(),
-            # 13: self.hint_13(),
+            12: self.hint_12(),
+            13: self.hint_13(),
             # # 14: self.hint_14(),
-            # 15: self.hint_15(),
-            # 16: self.hint_16(),
+            15: self.hint_15(),
+            16: self.hint_16(),
 
             # Add code
         }
