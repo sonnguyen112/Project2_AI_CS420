@@ -40,8 +40,7 @@ class VisualizationTool():
         self.__all_labels = []
         self.__list_drawn_tile = []
         self.action_visual_list = []
-        for action_visual in self.__log["machine_turn"]:
-
+        for index, action_visual in enumerate(self.__log["machine_turn"]):
             self.action_visual_list.append({
                 "type" : "hint",
                 "list_tile": action_visual["hint"][0]["list_tiles"],
@@ -49,6 +48,14 @@ class VisualizationTool():
                 "pos": action_visual["hint"][0]["pos"],
                 "pirate_pos" : action_visual["pirate_pos"]
             })
+            if index == 0:
+                self.action_visual_list.append({
+                    "type": "first_check_hint",
+                    "list_not_include": action_visual["first_check_hint"],
+                    "pos": self.__agent_pos,
+                    "pirate_pos" : None,
+                    "description": None
+                })
             self.action_visual_list.append({
                 "type": "action_1",
                 "list_not_include": action_visual["action_1"]["list_tiles_not_include_treasure"],
@@ -63,6 +70,7 @@ class VisualizationTool():
                 "description": action_visual["action_1"]["description"],
                 "pirate_pos" : action_visual["pirate_pos"]
             })
+        self.__actual_turn = 1
 
 
     def __close_win(self, e):
@@ -123,6 +131,8 @@ The pirate is free at the beginning of the {self.__log["turn_pirate_free"]}th tu
             if self.__pirate_pos != None:
                 prev_pos_pirate["canvas"].delete(prev_pos_pirate["text"])
             machine_log = self.action_visual_list[turn]
+            print("MACHINE LOG")
+            print(machine_log)
             if machine_log["type"] == "hint":
                 self.__agent_pos = machine_log["pos"]
                 if (self.__turn - 1) % 3 == 0:
@@ -169,7 +179,7 @@ The pirate is free at the beginning of the {self.__log["turn_pirate_free"]}th tu
 #             human_log = self.__log["human_turn"][turn]
             if machine_log["type"] == "hint":
                 self.__log_text.insert(INSERT, f"""\
-START TURN {turn + 1}
+START TURN {self.__actual_turn}
 """)        
             if machine_log["pirate_pos"] != None:
                 self.__log_text.insert(INSERT, f"""\
@@ -177,21 +187,22 @@ The pirate is at the ({machine_log["pirate_pos"][0]}, {machine_log["pirate_pos"]
 """)        
             if machine_log["type"] == "hint":
                 self.__log_text.insert(INSERT, f"""\
-HINT {turn + 1}: {machine_log["description"]}
-ADD HINT{turn + 1} TO HINT LIST
+HINT {self.__actual_turn}: {machine_log["description"]}
+ADD HINT{self.__actual_turn} TO HINT LIST
 """)
-            if turn + 1 == 1:
+            if turn + 1 == 2:
                 self.__log_text.insert(INSERT, f"""\
 HINT1: is_verified = TRUE, is_truth = TRUE
 """)        
-            if machine_log["type"] != "hint":
+            if machine_log["type"] != "hint" and machine_log["description"] != None:
                 self.__log_text.insert(INSERT, f"""\
 {machine_log["description"]}
-# """)        
+""")        
             if machine_log["type"] == "action_2":
                 self.__log_text.insert(INSERT, f"""\
-END TURN {turn + 1}
-""")        
+END TURN {self.__actual_turn}
+""")      
+                self.__actual_turn += 1
         self.__log_text.configure(state="disable")
 
     def __render_map(self):
