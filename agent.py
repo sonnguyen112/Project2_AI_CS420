@@ -224,7 +224,7 @@ class Agent():
         for x_ in range(x-1, x+2):
             for y_ in range(y-1, y+2):
                 if (0 <= x_ < len(game_map) and 0 <= y_ < len(game_map)):
-                    if game_map[x_][y_][-1] != '0' and game_map[x_][y_][-1] != 'M' and game_map[x_][y_][-1] != 'P':
+                    if game_map[x_][y_][-1] != '0':
                         obtain_list.append((x_, y_))
                     if game_map[x_][y_][-1] == 'T':
                         self.__is_win = True
@@ -241,7 +241,7 @@ class Agent():
         for x_ in range(x-2, x+3):
             for y_ in range(y-2, y+3):
                 if (0 <= x_ < len(map) and 0 <= y_ < len(map)):
-                    if map[x_][y_][-1] != '0' and map[x_][y_][-1] != 'M' and map[x_][y_][-1] != 'P':
+                    if map[x_][y_][-1] != '0':
                         obtain_list.append((x_, y_))
                     if map[x_][y_][-1] == 'T':
                         self.__is_win = True
@@ -332,16 +332,12 @@ class Agent():
             return self.__virtual_treasure
         if hint["id"] == 3:
             obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
-            print("obtainlist3")
-            print(obtain_list)
 
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true = self.intersection(
                         self.__hint_list_true, obtain_list)
-                    print("hintListtrue 3")
-                    print(self.__hint_list_true)
                     self.__virtual_treasure = random.choice(
                         self.__hint_list_true)
                     action_infor.append({
