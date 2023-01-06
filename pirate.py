@@ -67,7 +67,7 @@ class Pirate():
                 if(str(re1) in self.__map[x-1][y] or str(re1) in self.__map[x][y-1] or str(re1) in self.__map[x][y+1]):
                         tiles.append((x,y))
         
-        for x in range(1,self.__size):
+        for x in range(1,self.__size -1):
             y = 0
             if ( str(re1) in self.__map[x][y]):
                 if(str(re2) in self.__map[x+1][y] or str(re2) in self.__map[x-1][y] or str(re2) in self.__map[x][y+1]):
@@ -399,20 +399,20 @@ class Pirate():
         a = random.randint(0, 3)
         tiles = []
         if (a == 0):
-            for x in range(0, self.__size//2):
+            for x in range(0, self.__size):
                 for y in range(0, self.__size//2):
                     tiles.append((x, y))
         if (a == 1):
-            for x in range(0, self.__size//2):
+            for x in range(0, self.__size):
                 for y in range(self.__size//2, self.__size):
                     tiles.append((x, y))
         if (a == 2):
             for x in range(self.__size//2, self.__size):
-                for y in range(0, self.__size//2):
+                for y in range(0, self.__size):
                     tiles.append((x, y))
         if (a == 3):
-            for x in range(self.__size//2, self.__size):
-                for y in range(self.__size//2, self.__size):
+            for x in range(0, self.__size//2):
+                for y in range(0, self.__size):
                     tiles.append((x, y))
         return {
             "id": 13,
