@@ -16,14 +16,14 @@ class Pirate():
             # 1: self.hint_1(),
             # # 2: self.hint_2(),
             # 3: self.hint_3(),
-            # 4: self.hint_4(),
+            4: self.hint_4(),
             # 5: self.hint_5(),
             # 6: self.hint_6(),
             # 7: self.hint_7(),
             # 8: self.hint_8(),
             # 9: self.hint_9(),
             #10: self.hint_10(),
-            11: self.hint_11(),
+            # 11: self.hint_11(),
             # 12: self.hint_12(),
             # 13: self.hint_13(),
             # # 14: self.hint_14(),
@@ -133,7 +133,7 @@ class Pirate():
                     return True
                 else:
                     return False
-        elif ( hint["id"] in [1,4,6,9,13]):
+        elif ( hint["id"] in [1,2,4,6,9,13]):
             if self.__treasure  not in hint["val"]:
                 return True
             else:
@@ -206,6 +206,22 @@ class Pirate():
             "id": 1,
             "val": list_tile,
             "description": "A list of random tiles that doesn't contain the treasure:" + a
+        }
+    
+    def hint_2(self):
+        list_tile = []
+        n = random.randint(0, self.__size)
+        m = random.randint(0, self.__size)
+        size = random.randint(1, 12)
+        while ((n, m) not in list_tile and len(list_tile) < size and (n, m) != self.__treasure):
+            list_tile.append((n, m))
+            n = random.randint(0, self.__size)
+            m = random.randint(0, self.__size)
+        a = ','.join(str(e) for e in list_tile)
+        return {
+            "id": 1,
+            "val": list_tile,
+            "description": "A list of random tiles that contain the treasure:" + a
         }
 
     def hint_3(self):
