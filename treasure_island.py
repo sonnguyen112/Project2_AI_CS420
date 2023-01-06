@@ -11,6 +11,9 @@ class TreasureIslandGame():
             map_file)
         agent_pos_init = (random.randint(1, self.__size-2),
                           random.randint(1, self.__size-2))
+        while self.__game_map[agent_pos_init[0]][agent_pos_init[1]][-1] == "M" or self.__game_map[agent_pos_init[0]][agent_pos_init[1]][-1] == "P" or self.__game_map[agent_pos_init[0]][agent_pos_init[1]][0] == "0":
+            agent_pos_init = (random.randint(1, self.__size-2),
+                          random.randint(1, self.__size-2))
         while astar(self.__game_map, agent_pos_init, self.__treasure_pos) == False:
             agent_pos_init = (random.randint(1, self.__size-2),
                               random.randint(1, self.__size-2))
@@ -50,6 +53,7 @@ class TreasureIslandGame():
                 "who_win": None,
                 "machine_turn": [],
             }
+            prev_agent_pos = self.__agent.get_pos()
             while self.__agent.is_win() == False and self.__pirate.is_win() == False:
                 print("Turn", self.__turn)
                 hint = self.__pirate.give_hint(self.__turn)
@@ -61,10 +65,16 @@ class TreasureIslandGame():
                 print("PIRATE ACTION", pirate_pos)
                 self.__agent.set_pirate_pos(pirate_pos)
                 machine_turn = agent_actions
+
+            
                 machine_turn["hint"] = {
                     "list_tiles": hint["val"],
-                    "description": hint["description"]
+                    "description": hint["description"],
+                    "pos": prev_agent_pos
                 },
+
+                prev_agent_pos = agent_actions["action_2"]["pos"]
+                
                 machine_turn["pirate_pos"] = pirate_pos
                 logs["machine_turn"].append(machine_turn)
                 self.__turn += 1

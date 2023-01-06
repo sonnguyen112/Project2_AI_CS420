@@ -1084,8 +1084,7 @@ class Agent():
                 "action_2": 
                     action_2
                 ,
-                "which_hint_checked": hint["id"],
-                "is_hint_checked_true": self.__pirate.check_hint(hint)
+                "first_check_hint" : []
             }
 
 
