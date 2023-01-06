@@ -1090,7 +1090,7 @@ class Agent():
                             if self.__pos == self.__virtual_treasure:
                                 self.stay_large_scan
                                 action_infor.append({
-                                    "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                                    "list_tiles_not_include_treasure":  self.first_turn_check_hint,
                                     "description": "The agent perform a LARGE SCAN",
                                     "pos": self.__pos,
                                     "which_hint_checked": None,
@@ -1122,7 +1122,7 @@ class Agent():
                                     self.__pos = way_to_treasure[remain + i-1]
                                     remain = remain+i
                                     action_infor.append({
-                                    "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                                    "list_tiles_not_include_treasure":  [],
                                     "description": f"The agent moves {steps} steps to the {dir_of_agent[0]}",
                                     "pos": self.__pos,
                                     "which_hint_checked": None,
@@ -1136,7 +1136,7 @@ class Agent():
                                     self.__pos = way_to_treasure[remain + 4-1]
                                     remain = remain+4
                                     action_infor.append({
-                                    "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
+                                    "list_tiles_not_include_treasure":  [],
                                     "description": f"The agent moves 4 steps to the {dir_of_agent[0]}",
                                     "pos": self.__pos,
                                     "which_hint_checked": None,
