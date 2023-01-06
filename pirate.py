@@ -13,29 +13,32 @@ class Pirate():
         self.__treasureRegion = 2
         self.__regions = region_num
         self.__hint_dict = {
-            1: self.hint_1(),
-            # 2: self.hint_2(),
-            3: self.hint_3(),
-            4: self.hint_4(),
-            5: self.hint_5(),
-            6: self.hint_6(),
-            7: self.hint_7(),
-            8: self.hint_8(),
-            9: self.hint_9(),
-            10: self.hint_10(),
+            # 1: self.hint_1(),
+            # # 2: self.hint_2(),
+            # 3: self.hint_3(),
+            # 4: self.hint_4(),
+            # 5: self.hint_5(),
+            # 6: self.hint_6(),
+            # 7: self.hint_7(),
+            # 8: self.hint_8(),
+            # 9: self.hint_9(),
+            # 10: self.hint_10(),
             11: self.hint_11(),
-            12: self.hint_12(),
-            13: self.hint_13(),
-            # 14: self.hint_14(),
-            15: self.hint_15(),
-            16: self.hint_16(),
+            # 12: self.hint_12(),
+            # 13: self.hint_13(),
+            # # 14: self.hint_14(),
+            # 15: self.hint_15(),
+            # 16: self.hint_16(),
 
             # Add code
         }
         self.__pos = self.__set_init_pos()
-        self.__path_to_treasure = astar(self.__map, self.__pos, self.__treasure)
+        self.__path_to_treasure = None
         self.__index_path = 0
         self.__turn = 1
+
+    def cal_path(self):
+        self.__path_to_treasure = astar(self.__map, self.__pos, self.__treasure)
 
     def set_treasure(self,tresure_pos):
         self.__treasure=tresure_pos
@@ -67,7 +70,7 @@ class Pirate():
                 if(str(re1) in self.__map[x-1][y] or str(re1) in self.__map[x][y-1] or str(re1) in self.__map[x][y+1]):
                         tiles.append((x,y))
         
-        for x in range(1,self.__size -1):
+        for x in range(1,self.__size-1 -1):
             y = 0
             if ( str(re1) in self.__map[x][y]):
                 if(str(re2) in self.__map[x+1][y] or str(re2) in self.__map[x-1][y] or str(re2) in self.__map[x][y+1]):
@@ -172,9 +175,9 @@ class Pirate():
         if len(list(self.__hint_dict.items())) == 0:
             return None
         key, val = random.choice(list(self.__hint_dict.items()))
-        if turn == 1:
-            while self.check_hint(val) == False:
-                key, val = random.choice(list(self.__hint_dict.items()))
+        # if turn == 1:
+        #     while self.check_hint(val) == False:
+        #         key, val = random.choice(list(self.__hint_dict.items()))
         del self.__hint_dict[key]
         return val
 
@@ -357,11 +360,12 @@ class Pirate():
             }
 
     def hint_10(self):
-        n = random.randint(0, self.__regions)
-        m = random.randint(0, self.__regions)
+        n = random.randint(1, self.__regions-1)
+        m = random.randint(1, self.__regions-1)
         while (m == n):
-            m = random.randint(0, self.__regions)
+            m = random.randint(1, self.__regions-1)
         tiles = self.check_boundary(m,n)
+        tiles += self.check_boundary(n,m)
         return {
             "id": 10,
             "val": tiles,
@@ -371,10 +375,11 @@ class Pirate():
 
     def hint_11(self):
         tiles = []
-        for x in range(1, self.__regions):
-            for y in range(x,self.__regions+1):
+        for x in range(1, self.__regions-1):
+            for y in range(x,self.__regions):
                 tiles += self.check_boundary(x,y)
-        tiles = list(dict.fromkeys(tiles))
+                # tiles += self.check_boundary(y,x)
+        # tiles = list(dict.fromkeys(tiles))
         return {
             "id": 11,
             "val": tiles,

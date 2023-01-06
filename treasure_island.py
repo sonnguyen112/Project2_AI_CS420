@@ -22,6 +22,7 @@ class TreasureIslandGame():
         self.__pirate = Pirate(
             self.__game_map, self.__turn_reveal, self.__turn_free, self.__agent.get_pos(),self.__num_region)
         self.__pirate.set_treasure(self.__treasure_pos)
+        self.__pirate.cal_path()
         self.__turn = 1
 
     def __load_map(self, map_file):

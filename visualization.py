@@ -79,7 +79,7 @@ class VisualizationTool():
             self.__update_game()
 
     def __update_game(self):
-        print(self.__list_drawn_tile)
+
         for tile in self.__list_drawn_tile:
             # if tile["text"] != None:
             #     tile["canvas"].delete(tile["text"])
@@ -126,7 +126,6 @@ The pirate is free at the beginning of the {self.__log["turn_pirate_free"]}th tu
             if machine_log["type"] == "hint":
                 self.__agent_pos = machine_log["pos"]
                 if (self.__turn - 1) % 3 == 0:
-                    print("LIST TITLE", machine_log["list_tile"])
                     for tile in machine_log["list_tile"]:
                         self.__all_labels[tile[0]][tile[1]]["canvas"].configure(highlightbackground="red", highlightthickness=1)
                         self.__list_drawn_tile.append(self.__all_labels[tile[0]][tile[1]])
