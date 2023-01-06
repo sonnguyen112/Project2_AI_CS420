@@ -294,8 +294,8 @@ class Pirate():
         if (a == 0):
             titles = []
             for i in range(self.__size):
-                titles.append(m,i)
-                titles.append(i,n)            
+                titles.append((m,i))
+                titles.append((i,n))            
             return {
                 "id": 8,
                 "val": titles,
@@ -303,7 +303,7 @@ class Pirate():
             }
         if (a == 1):
             for i in range(self.__size):
-                titles.append(i,n) 
+                titles.append((i,n))
             return {
                 "id": 8,
                 "val":titles,
@@ -311,7 +311,7 @@ class Pirate():
             }
         if (a == 2):
             for i in range(self.__size):
-                titles.append(m,i)
+                titles.append((m,i))
             return {
                 "id": 8,
                 "val":titles,
@@ -325,8 +325,8 @@ class Pirate():
         if (a == 0):
             titles = []
             for i in range(self.__size):
-                titles.append(m,i)
-                titles.append(i,n)            
+                titles.append((m,i))
+                titles.append((i,n))         
             return {
                 "id": 8,
                 "val": titles,
@@ -334,7 +334,7 @@ class Pirate():
             }
         if (a == 1):
             for i in range(self.__size):
-                titles.append(i,n) 
+                titles.append((i,n)) 
             return {
                 "id": 8,
                 "val":titles,
@@ -342,7 +342,7 @@ class Pirate():
             }
         if (a == 2):
             for i in range(self.__size):
-                titles.append(m,i)
+                titles.append((m,i))
             return {
                 "id": 8,
                 "val":titles,
