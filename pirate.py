@@ -2,14 +2,14 @@ import random
 from utils import astar
 
 class Pirate():
-    def __init__(self, game_map, turn_reveal, turn_free, agent_pos,treasure_pos,region_num):
+    def __init__(self, game_map, turn_reveal, turn_free, agent_pos,region_num):
         self.__agent_pos = agent_pos
         self.__is_win = False
         self.__size = len(game_map)
         self.__map = game_map
         self.__turn_reveal = turn_reveal
         self.__turn_free = turn_free
-        self.__treasure = treasure_pos
+        self.__treasure = None
         self.__treasureRegion = 2
         self.__regions = region_num
         self.__hint_dict = {
@@ -36,6 +36,9 @@ class Pirate():
         self.__path_to_treasure = astar(self.__map, self.__pos, self.__treasure)
         self.__index_path = 0
         self.__turn = 1
+
+    def set_treasure(self,tresure_pos):
+        self.__treasure=tresure_pos
 
     def check_boundary(self, re1,re2):
         tiles = []
@@ -306,7 +309,7 @@ class Pirate():
             }
         if (a == 1):
             for i in range(self.__size):
-                titles.append((i,n)) 
+                titles.append((i,n))
             return {
                 "id": 8,
                 "val":titles,
@@ -325,11 +328,12 @@ class Pirate():
         a = random.randint(0, 2)
         n = random.randint(0, self.__size-1)
         m = random.randint(0, self.__size-1)
+        titles = []
         if (a == 0):
-            titles = []
+            
             for i in range(self.__size):
-                titles.append((m,i))
-                titles.append((i,n))            
+                titles.append(((m,i)))
+                titles.append(((i,n)))         
             return {
                 "id": 8,
                 "val": titles,
@@ -337,7 +341,7 @@ class Pirate():
             }
         if (a == 1):
             for i in range(self.__size):
-                titles.append(i,n) 
+                titles.append((i,n)) 
             return {
                 "id": 8,
                 "val":titles,
@@ -345,7 +349,7 @@ class Pirate():
             }
         if (a == 2):
             for i in range(self.__size):
-                titles.append(m,i)
+                titles.append((m,i))
             return {
                 "id": 8,
                 "val":titles,
@@ -357,7 +361,7 @@ class Pirate():
         m = random.randint(0, self.__regions)
         while (m == n):
             m = random.randint(0, self.__regions)
-        tiles = self.check_boundary(self,m,n)
+        tiles = self.check_boundary(m,n)
         return {
             "id": 10,
             "val": tiles,
@@ -369,7 +373,7 @@ class Pirate():
         tiles = []
         for x in range(1, self.__regions):
             for y in range(x,self.__regions+1):
-                tiles += self.check_boundary(self,x,y)
+                tiles += self.check_boundary(x,y)
         tiles = list(dict.fromkeys(tiles))
         return {
             "id": 11,
@@ -381,7 +385,7 @@ class Pirate():
         tile = []
         tile_0 = []
         for x in range(1, self.__regions):
-            tile += self.check_boundary(self,x,0)
+            tile += self.check_boundary(x,0)
         for i in tile:
             if self.__map[i[0]][i[1]] == "0":
                 tile_0.append(i)

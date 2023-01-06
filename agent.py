@@ -7,7 +7,7 @@ from pirate import Pirate
 
 
 class Agent():
-    def __init__(self, init_pos, map, turn_pirate_reveal, turn_pirate_free):
+    def __init__(self, init_pos, map, turn_pirate_reveal, turn_pirate_free,num_region):
         self.__is_win = False
         self.__pos = init_pos
         self.__hint_list_true = []
@@ -23,7 +23,7 @@ class Agent():
                     self.__hint_list_init.append((i, j))
         self.action_list = []
         self.__pirate = Pirate(map, turn_pirate_reveal,
-                               turn_pirate_free, self.__pos)
+                               turn_pirate_free, self.__pos,num_region)
 
     def __set_init_pos(self, map):
         # Add code

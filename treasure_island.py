@@ -18,9 +18,10 @@ class TreasureIslandGame():
             agent_pos_init = (random.randint(1, self.__size-2),
                               random.randint(1, self.__size-2))
         self.__agent = Agent(agent_pos_init, self.__game_map,
-                             self.__turn_reveal, self.__turn_free)
+                             self.__turn_reveal, self.__turn_free,self.__num_region)
         self.__pirate = Pirate(
-            self.__game_map, self.__turn_reveal, self.__turn_free, self.__agent.get_pos(),self.__treasure_pos,self.__num_region)
+            self.__game_map, self.__turn_reveal, self.__turn_free, self.__agent.get_pos(),self.__num_region)
+        self.__pirate.set_treasure(self.__treasure_pos)
         self.__turn = 1
 
     def __load_map(self, map_file):
