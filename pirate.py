@@ -36,6 +36,9 @@ class Pirate():
         self.__path_to_treasure = None
         self.__index_path = 0
         self.__turn = 1
+    
+    def is_treasure(self, pos):
+        return pos == self.__treasure
 
     def cal_path(self):
         self.__path_to_treasure = astar(self.__map, self.__pos, self.__treasure)
