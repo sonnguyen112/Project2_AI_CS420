@@ -134,7 +134,7 @@ The pirate is free at the beginning of the {self.__log["turn_pirate_free"]}th tu
             # for tile in prev_red_border_list:
             #     self.__all_labels[tile[0]][tile[1]]["canvas"].configure(highlightbackground="white", highlightthickness=1)
             prev_pos_agent["canvas"].delete(prev_pos_agent["text"])
-            if self.__pirate_pos != None:
+            if  prev_pos_pirate != None:
                 prev_pos_pirate["canvas"].delete(prev_pos_pirate["text"])
             machine_log = self.action_visual_list[turn]
             print("MACHINE LOG")

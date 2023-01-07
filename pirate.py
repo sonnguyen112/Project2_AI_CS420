@@ -37,6 +37,9 @@ class Pirate():
         self.__index_path = 0
         self.__turn = 1
     
+    def set_agent_pos(self, pos):
+        self.__agent_pos=pos
+
     def is_treasure(self, pos):
         return pos == self.__treasure
 
@@ -142,6 +145,8 @@ class Pirate():
             else:
                 return False
         else:
+            print("tresure")
+            print(self.__treasure)
             if self.__treasure in hint["val"]:
                 return True
             else:
@@ -181,7 +186,6 @@ class Pirate():
         if turn == 1:
             while self.check_hint(val) == False:
                 key, val = random.choice(list(self.__hint_dict.items()))
-        del self.__hint_dict[key]
         return val
 
     def action(self, turn):
@@ -197,13 +201,13 @@ class Pirate():
 
     def hint_1(self):
         list_tile = []
-        n = random.randint(0, self.__size)
-        m = random.randint(0, self.__size)
+        n = random.randint(0, self.__size-1)
+        m = random.randint(0, self.__size-1)
         size = random.randint(1, 12)
         while ((n, m) not in list_tile and len(list_tile) < size and (n, m) != self.__treasure):
             list_tile.append((n, m))
-            n = random.randint(0, self.__size)
-            m = random.randint(0, self.__size)
+            n = random.randint(0, self.__size-1)
+            m = random.randint(0, self.__size-1)
         a = ','.join(str(e) for e in list_tile)
         return {
             "id": 1,
@@ -213,13 +217,13 @@ class Pirate():
     
     def hint_2(self):
         list_tile = []
-        n = random.randint(0, self.__size)
-        m = random.randint(0, self.__size)
+        n = random.randint(0, self.__size-1)
+        m = random.randint(0, self.__size-1)
         size = random.randint(1, 12)
         while ((n, m) not in list_tile and len(list_tile) < size and (n, m) != self.__treasure):
             list_tile.append((n, m))
-            n = random.randint(0, self.__size)
-            m = random.randint(0, self.__size)
+            n = random.randint(0, self.__size-1)
+            m = random.randint(0, self.__size-1)
         a = ','.join(str(e) for e in list_tile)
         return {
             "id": 1,
@@ -232,10 +236,10 @@ class Pirate():
         list_re = []
         list_re.append(self.__treasureRegion)
         tiles = []
-        m = random.randint(1, self.__regions)
+        m = random.randint(1, self.__regions-1)
         while (len(list_re) < n and m not in list_re):
             list_re.append(m)
-            m = random.randint(0, self.__regions)
+            m = random.randint(0, self.__regions-1)
         for re in list_re:
             for x in range(self.__size):
                 for y in range(self.__size):
@@ -252,10 +256,10 @@ class Pirate():
         n = random.randint(1, 3)
         list_re = []
         tiles = []
-        m = random.randint(1, self.__regions)
+        m = random.randint(1, self.__regions-1)
         while (len(list_re) < n and m not in list_re and m != self.__treasureRegion):
             list_re.append(m)
-            m = random.randint(0, self.__regions)
+            m = random.randint(0, self.__regions-1)
         for re in list_re:
             for x in range(self.__size):
                 for y in range(self.__size):
@@ -316,8 +320,8 @@ class Pirate():
     def hint_8(self):
         # Add code
         a = random.randint(0, 2)
-        n = random.randint(0, self.__size)
-        m = random.randint(0, self.__size)
+        n = random.randint(0, self.__size-1)
+        m = random.randint(0, self.__size-1)
         titles = []
         if (a == 0):
             titles = []
@@ -357,7 +361,7 @@ class Pirate():
                 titles.append(((m,i)))
                 titles.append(((i,n)))         
             return {
-                "id": 8,
+                "id": 9,
                 "val": titles,
                 "description": "A column and a row that do not contain the treasure:" + str((m,n))
             }
@@ -365,7 +369,7 @@ class Pirate():
             for i in range(self.__size):
                 titles.append((i,n)) 
             return {
-                "id": 8,
+                "id": 9,
                 "val":titles,
                 "description": "A column that do not contain the treasure:" + str(n)
             }
@@ -373,7 +377,7 @@ class Pirate():
             for i in range(self.__size):
                 titles.append((m,i))
             return {
-                "id": 8,
+                "id": 9,
                 "val":titles,
                 "description": "A row that do not contain the treasure:" + str(m)
             }

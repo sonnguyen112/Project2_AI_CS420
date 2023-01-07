@@ -7,7 +7,7 @@ from pirate import Pirate
 
 random.seed(3)
 class Agent():
-    def __init__(self, init_pos, map, turn_pirate_reveal, turn_pirate_free,num_region):
+    def __init__(self, init_pos, map, turn_pirate_reveal, turn_pirate_free,num_region,pirate):
         self.__is_win = False
         self.__pos = init_pos
         self.__hint_list_true = []
@@ -24,8 +24,7 @@ class Agent():
             for j in range(len(map)):
                     self.__hint_list_init.append((i, j))
         self.action_list = []
-        self.__pirate = Pirate(map, turn_pirate_reveal,
-                               turn_pirate_free, self.__pos,num_region)
+        self.__pirate = pirate
 
     def __set_init_pos(self, map):
         # Add code
@@ -228,9 +227,9 @@ class Agent():
         for x_ in range(x-1, x+2):
             for y_ in range(y-1, y+2):
                 if (0 <= x_ < len(game_map) and 0 <= y_ < len(game_map)):
-                    if game_map[x_][y_][-1] == 'T':
+                    if self.__pirate.is_treasure((x_, y_)):
                         self.__is_win = True
-                    if game_map[x_][y_][-1] != '0':
+                    elif game_map[x_][y_][-1] != '0':
                         obtain_list.append((x_, y_))
                     
         if self.__is_win != True:
@@ -244,9 +243,9 @@ class Agent():
         for x_ in range(x-2, x+3):
             for y_ in range(y-2, y+3):
                 if (0 <= x_ < len(map) and 0 <= y_ < len(map)):
-                    if map[x_][y_][-1] == 'T':
+                    if self.__pirate.is_treasure((x_, y_)):
                         self.__is_win = True
-                    if map[x_][y_][-1] != '0':
+                    elif map[x_][y_][-1] != '0':
                         obtain_list.append((x_, y_))
         if self.__is_win != True:
             self.__hint_list_true = list(filter(lambda x: x not in obtain_list and map[x[0]][x[1]][-1] != '0' , self.__hint_list_true))
@@ -966,6 +965,7 @@ class Agent():
                 print(self.__virtual_treasure)
                 print("direction")
                 print(direction)
+
                 if way_to_treasure != False:
                     summary_list_dir = self.get_count(direction)
                     for i in summary_list_dir:
@@ -1043,7 +1043,7 @@ class Agent():
                     if num_action_rest > 0:
                         self.stay_large_scan
                         action_infor.append({
-                                "list_tiles_not_include_treasure":  self.__scan.pop,
+                                "list_tiles_not_include_treasure":  self.__scan.pop(),
                                 "description": "The agent perform a LARGE SCAN",
                                 "pos": self.__pos,
                                 "which_hint_checked": None,

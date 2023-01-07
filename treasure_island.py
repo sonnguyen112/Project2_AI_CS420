@@ -17,12 +17,18 @@ class TreasureIslandGame():
         while astar(self.__game_map, agent_pos_init, self.__treasure_pos) == False:
             agent_pos_init = (random.randint(1, self.__size-2),
                               random.randint(1, self.__size-2))
-        self.__agent = Agent(agent_pos_init, self.__game_map,
-                             self.__turn_reveal, self.__turn_free,self.__num_region)
+       
         self.__pirate = Pirate(
-            self.__game_map, self.__turn_reveal, self.__turn_free, self.__agent.get_pos(),self.__num_region)
+            self.__game_map, self.__turn_reveal, self.__turn_free, None,self.__num_region)
+        
         self.__pirate.set_treasure(self.__treasure_pos)
+        
+        print("khoi dep trai")
+        print(self.__treasure_pos)
         self.__pirate.cal_path()
+        self.__agent = Agent(agent_pos_init, self.__game_map,
+                             self.__turn_reveal, self.__turn_free,self.__num_region,self.__pirate)
+        self.__pirate.set_agent_pos(self.__agent.get_pos())
         self.__turn = 1
 
     def __load_map(self, map_file):
