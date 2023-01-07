@@ -3,7 +3,7 @@ from pirate import Pirate
 import random
 from utils import astar
 import pickle
-
+random.seed(3)
 
 class TreasureIslandGame():
     def __init__(self, map_file) -> None:

@@ -5,7 +5,7 @@ import numpy as np
 import heapq
 from pirate import Pirate
 
-
+random.seed(3)
 class Agent():
     def __init__(self, init_pos, map, turn_pirate_reveal, turn_pirate_free,num_region):
         self.__is_win = False
@@ -17,7 +17,7 @@ class Agent():
         self.__pirate_pos = None
         self.turn_pirate_free_agent_know = turn_pirate_free
         self.__hint_list_init = []
-        self.__scan = [(0,0)]
+        self.__scan = []
         self.turn_teleport = 1
         self.first_turn_check_hint =[]
         for i in range(len(map)):
@@ -58,7 +58,7 @@ class Agent():
             obtain_list = []
             for i in range(len(game_map)):
                 for j in range(len(game_map)):
-                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0'):
+                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' ):
                         obtain_list.append((i, j))
             self.first_turn_check_hint += obtain_list
             self.__hint_list_true = (list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
@@ -85,7 +85,7 @@ class Agent():
             obtain_list = []
             for i in range(len(game_map)):
                 for j in range(len(game_map)):
-                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' ):
                         obtain_list.append((i, j))
             self.__hint_list_true = (
                 list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
@@ -103,11 +103,10 @@ class Agent():
             obtain_list = []
             for i in range(len(game_map)):
                 for j in range(len(game_map)):
-                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' ):
                         obtain_list.append((i, j))
             self.__hint_list_true = (
-                list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
-                               [x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
+                list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
             self.first_turn_check_hint = obtain_list
             return random.choice(self.__hint_list_true)
         if hint["id"] == 7:
@@ -139,7 +138,7 @@ class Agent():
             obtain_list = []
             for i in range(len(game_map)):
                 for j in range(len(game_map)):
-                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' ):
                         obtain_list.append((i, j))
             self.__hint_list_true = (
                 list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]]
@@ -176,7 +175,7 @@ class Agent():
             obtain_list = []
             for i in range(len(game_map)):
                 for j in range(len(game_map)):
-                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' ):
                         obtain_list.append((i, j))
             self.__hint_list_true = (
                 list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_init)))
@@ -229,14 +228,14 @@ class Agent():
         for x_ in range(x-1, x+2):
             for y_ in range(y-1, y+2):
                 if (0 <= x_ < len(game_map) and 0 <= y_ < len(game_map)):
-                    if game_map[x_][y_][-1] != '0':
-                        obtain_list.append((x_, y_))
                     if game_map[x_][y_][-1] == 'T':
                         self.__is_win = True
+                    if game_map[x_][y_][-1] != '0':
+                        obtain_list.append((x_, y_))
+                    
         if self.__is_win != True:
-            self.__hint_list_true = list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
-        self.__scan.clear()
-        self.__scan = obtain_list
+            self.__hint_list_true = list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' , self.__hint_list_true))
+        self.__scan.append(obtain_list)
 
     def stay_large_scan(self, hint, map):
         y = self.get_pos()[1]
@@ -245,16 +244,13 @@ class Agent():
         for x_ in range(x-2, x+3):
             for y_ in range(y-2, y+3):
                 if (0 <= x_ < len(map) and 0 <= y_ < len(map)):
-                    if map[x_][y_][-1] != '0':
-                        obtain_list.append((x_, y_))
                     if map[x_][y_][-1] == 'T':
                         self.__is_win = True
+                    if map[x_][y_][-1] != '0':
+                        obtain_list.append((x_, y_))
         if self.__is_win != True:
-            self.__hint_list_true = list(
-                filter(lambda x: x not in obtain_list and map[x[0]][x[1]][-1] != '0' and map[x[0]]
-                               [x[1]][-1] != 'M' and map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
-        self.__scan.clear()
-        self.__scan = obtain_list
+            self.__hint_list_true = list(filter(lambda x: x not in obtain_list and map[x[0]][x[1]][-1] != '0' , self.__hint_list_true))
+        self.__scan.append(obtain_list)
 
     def is_change_virtual_treasure(self, current_obtain_list):
         if self.__virtual_treasure not in current_obtain_list:
@@ -266,7 +262,7 @@ class Agent():
             obtain_list = []
             for i in range(len(game_map)):
                 for j in range(len(game_map)):
-                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' ):
                         obtain_list.append((i, j))
             if self.is_change_virtual_treasure(obtain_list) == False:
                 if self.__pirate.check_hint(hint):
@@ -378,7 +374,7 @@ class Agent():
             obtain_list = []
             for i in range(len(game_map)):
                 for j in range(len(game_map)):
-                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' ):
                         obtain_list.append((i, j))
             if self.is_change_virtual_treasure(obtain_list) == False:
                 if self.__pirate.check_hint(hint):
@@ -414,7 +410,7 @@ class Agent():
                     self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 5:
-            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
+            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' , hint['val']))
             print("obtain_list")
             print(obtain_list)
             if self.is_change_virtual_treasure(obtain_list) == True:
@@ -455,7 +451,7 @@ class Agent():
             obtain_list = []
             for i in range(len(game_map)):
                 for j in range(len(game_map)):
-                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' ):
                         obtain_list.append((i, j))
             if self.is_change_virtual_treasure(obtain_list) == False:
                 if self.__pirate.check_hint(hint):
@@ -494,11 +490,11 @@ class Agent():
             obtain_list = self.__hint_list_true.copy()
             if self.__pirate(hint) == True:
                 for i in obtain_list:
-                    if math.sqrt((i[0]-self.__pos[0])**2 + (i[1]-self.__pos[1])**2) > math.sqrt(((i[0]-self.__pirate_pos[0])**2 + (i[1]-self.__pirate_pos[1])**2)):
+                    if (math.sqrt((i[0]-self.__pos[0])**2 + (i[1]-self.__pos[1])**2) > math.sqrt(((i[0]-self.__pirate_pos[0])**2 + (i[1]-self.__pirate_pos[1])**2))) :
                         obtain_list.remove(i)
             else:
                 for i in obtain_list:
-                    if math.sqrt((i[0]-self.__pos[0])**2 + (i[1]-self.__pos[1])**2) < math.sqrt(((i[0]-self.__pirate_pos[0])**2 + (i[1]-self.__pirate_pos[1])**2)):
+                    if math.sqrt((i[0]-self.__pos[0])**2 + (i[1]-self.__pos[1])**2) < math.sqrt(((i[0]-self.__pirate_pos[0])**2 + (i[1]-self.__pirate_pos[1])**2)) :
                         obtain_list.remove(i)
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.__pirate.check_hint(hint):
@@ -519,7 +515,7 @@ class Agent():
                 else:
                     num_action_rest = num_action_rest-1
                     self.__hint_list_true = list(
-                        filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
+                        filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' , self.__hint_list_true))
                     self.first_turn_check_hint = obtain_list
                     action_infor.append({
                             "list_tiles_not_include_treasure":  obtain_list,
@@ -534,7 +530,7 @@ class Agent():
                     self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 8:
-            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
+            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' , hint['val']))
             print("obtain_list")
             print(obtain_list)
             if self.is_change_virtual_treasure(obtain_list) == True:
@@ -577,7 +573,7 @@ class Agent():
             obtain_list = []
             for i in range(len(game_map)):
                 for j in range(len(game_map)):
-                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' ):
                         obtain_list.append((i, j))
             if self.is_change_virtual_treasure(obtain_list) == False:
                 if self.__pirate.check_hint(hint):
@@ -613,7 +609,7 @@ class Agent():
                     self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 10:
-            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
+            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' , hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
@@ -649,7 +645,7 @@ class Agent():
                     self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 11:
-            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
+            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0', hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
@@ -685,7 +681,7 @@ class Agent():
                     self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 12:
-            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
+            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' , hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
@@ -724,7 +720,7 @@ class Agent():
             obtain_list = []
             for i in range(len(game_map)):
                 for j in range(len(game_map)):
-                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' and game_map[i][j][-1] != 'M' and game_map[i][j][-1] != 'P'):
+                    if ((i, j) in hint["val"] and game_map[i][j][-1] != '0' ):
                         obtain_list.append((i, j))
             if self.is_change_virtual_treasure(obtain_list) == False:
                 if self.__pirate.check_hint(hint):
@@ -761,7 +757,7 @@ class Agent():
                     self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 14:
-            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
+            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' , hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
@@ -797,7 +793,7 @@ class Agent():
                     self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 15:
-            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
+            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' , hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
@@ -833,7 +829,7 @@ class Agent():
                     self.__hint_list_true)
             return self.__virtual_treasure
         if hint["id"] == 16:
-            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', hint['val']))
+            obtain_list = list(filter(lambda x: game_map[x[0]][x[1]][-1] != '0' , hint['val']))
             if self.is_change_virtual_treasure(obtain_list) == True:
                 if self.__pirate.check_hint(hint):
                     num_action_rest = num_action_rest-1
@@ -943,142 +939,6 @@ class Agent():
 
  # count down agent turn
     def action(self, hint, map):
-        if (hint == None):
-            if self.is_change_virtual_treasure(self.__hint_list_true):
-                    self.__virtual_treasure = random.choice(self.__hint_list_true)
-            for x in self.__hint_list_true:
-                if map[x[0]][x[1]][-1] == 'T':
-                    self.__is_win = True
-            num_action_rest = 2
-            steps = 0
-            dir_of_agent = []
-            action_infor = []
-            while num_action_rest > 0:
-
-                if self.is_change_virtual_treasure(self.__hint_list_true):
-                    self.__virtual_treasure = random.choice(self.__hint_list_true)
-                direction = []
-        
-                way_to_treasure = self.A_start_find_way(map, direction)
-                direction = direction[::-1]
-                remain = 0
-                remain2 = 0
-                steps = 0
-                
-            
-                print("way to treasure")
-                print(way_to_treasure)
-                print(self.__pos)
-                print(self.__virtual_treasure)
-                print("direction")
-                print(direction)
-                if way_to_treasure != False:
-                    summary_list_dir = self.get_count(direction)
-                    for i in summary_list_dir:
-                        if direction[remain2] == (1, 0):
-                            dir_of_agent.append("south")
-                        if direction[remain2] == (-1, 0):
-                            dir_of_agent.append("north")
-                        if direction[remain2] == (0, 1):
-                            dir_of_agent.append("east")
-                        if direction[remain2] == (0, -1):
-                            dir_of_agent.append("west")
-                        remain2 = remain2 + i - 1
-                        if num_action_rest > 0:
-                            if self.__pos == self.__virtual_treasure:
-                                self.stay_large_scan
-                                action_infor.append({
-                                    "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
-                                    "description": "The agent perform a LARGE SCAN",
-                                    "pos": self.__pos,
-                                    "which_hint_checked": None,
-                                    "is_hint_checked_true": None,
-                                    "is_win": self.is_win()
-                                })
-                                num_action_rest = num_action_rest-1
-                            else:
-                                if i <= 2:
-                                    steps = i
-                                    # print(remain + sum_of_direction)
-                                    self.__pos = way_to_treasure[remain + i-1]
-                                    remain = remain+i
-
-                                    self.small_scan(map)
-                                    action_infor.append({
-                                    "list_tiles_not_include_treasure":  self.__scan,
-                                    "description":  f"The agent moves {steps} steps to the {dir_of_agent[0]} and SMALL SCAN",
-                                    "pos": self.__pos,
-                                    "which_hint_checked": None,
-                                    "is_hint_checked_true": None,
-                                    "is_win": self.is_win()
-                                    })
-                                    dir_of_agent.pop(0)
-                                    num_action_rest = num_action_rest-1
-                                elif i <= 3:
-                                    steps = i
-                                  
-                                    self.__pos = way_to_treasure[remain + i-1]
-                                    remain = remain+i
-                                    action_infor.append({
-                                    "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
-                                    "description": f"The agent moves {steps} steps to the {dir_of_agent[0]}",
-                                    "pos": self.__pos,
-                                    "which_hint_checked": None,
-                                    "is_hint_checked_true": None,
-                                    "is_win": self.is_win()
-                                })
-                                    dir_of_agent.pop(0)
-                                    num_action_rest = num_action_rest-1
-                                else:
-                                  
-                                    self.__pos = way_to_treasure[remain + 4-1]
-                                    remain = remain+4
-                                    action_infor.append({
-                                    "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
-                                    "description": f"The agent moves 4 steps to the {dir_of_agent[0]}",
-                                    "pos": self.__pos,
-                                    "which_hint_checked": None,
-                                    "is_hint_checked_true": None,
-                                    "is_win": self.is_win()
-                                })
-                                    dir_of_agent.pop(0)
-                                    num_action_rest = num_action_rest-1
-                    if num_action_rest > 0:
-                        self.stay_large_scan
-                        action_infor.append({
-                                "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
-                                "description": "The agent perform a LARGE SCAN",
-                                "pos": self.__pos,
-                                "which_hint_checked": None,
-                                "is_hint_checked_true": None,
-                                "is_win": self.is_win()
-                            })
-                        num_action_rest = num_action_rest-1
-                else:
-                    if num_action_rest > 0:
-                        self.stay_large_scan
-                        action_infor.append({
-                            "list_tiles_not_include_treasure":  list(filter(lambda x: x not in self.__hint_list_true, self.__hint_list_init)),
-                            "description": "The agent perform a LARGE SCAN",
-                            "pos": self.__pos,
-                            "which_hint_checked": None,
-                            "is_hint_checked_true": None,
-                            "is_win": self.is_win()
-                        })
-                        num_action_rest = num_action_rest-1
-            action_1 = action_infor.pop(0)
-            action_2 = action_infor.pop(0)
-            self.action_list.clear()
-            return {
-                "action_1": 
-                    action_1
-                ,
-                "action_2": 
-                    action_2
-                ,
-            }
-
-        else:
             if self.turn_pirate_free_agent_know == 0 and self.turn_teleport > 0:
                 if self.heuristic(self.__pirate_pos, self.__virtual_treasure) < self.heuristic(self.__pos, self.__virtual_treasure):
                     self.teleport(
@@ -1117,12 +977,12 @@ class Agent():
                             dir_of_agent.append("east")
                         if direction[remain2] == (0, -1):
                             dir_of_agent.append("west")
-                        remain2 = remain2 + i - 1
+                        remain2 = remain2 + i 
                         if num_action_rest > 0:
                             if self.__pos == self.__virtual_treasure:
                                 self.stay_large_scan
                                 action_infor.append({
-                                    "list_tiles_not_include_treasure":  self.__scan,
+                                    "list_tiles_not_include_treasure":  self.__scan.pop(),
                                     "description": "The agent perform a LARGE SCAN",
                                     "pos": self.__pos,
                                     "which_hint_checked": None,
@@ -1136,10 +996,13 @@ class Agent():
                                     # print(remain + sum_of_direction)
                                     self.__pos = way_to_treasure[remain + i-1]
                                     remain = remain+i
-
+                                    print("pos")
+                                    print(self.__pos)
                                     self.small_scan(map)
+                                    print("scan")
+                                    print(self.__scan)
                                     action_infor.append({
-                                    "list_tiles_not_include_treasure":  self.__scan,
+                                    "list_tiles_not_include_treasure":  self.__scan.pop(),
                                     "description":  f"The agent moves {steps} steps to the {dir_of_agent[0]} and SMALL SCAN",
                                     "pos": self.__pos,
                                     "which_hint_checked": None,
@@ -1180,7 +1043,7 @@ class Agent():
                     if num_action_rest > 0:
                         self.stay_large_scan
                         action_infor.append({
-                                "list_tiles_not_include_treasure":  self.__scan,
+                                "list_tiles_not_include_treasure":  self.__scan.pop,
                                 "description": "The agent perform a LARGE SCAN",
                                 "pos": self.__pos,
                                 "which_hint_checked": None,
@@ -1192,7 +1055,7 @@ class Agent():
                     if num_action_rest > 0:
                         self.stay_large_scan
                         action_infor.append({
-                            "list_tiles_not_include_treasure":  self.__scan,
+                            "list_tiles_not_include_treasure":  self.__scan.pop(),
                             "description": "The agent perform a LARGE SCAN",
                             "pos": self.__pos,
                             "which_hint_checked": None,

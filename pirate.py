@@ -1,6 +1,6 @@
 import random
 from utils import astar
-
+random.seed(3)
 class Pirate():
     def __init__(self, game_map, turn_reveal, turn_free, agent_pos,region_num):
         self.__agent_pos = agent_pos

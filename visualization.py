@@ -67,7 +67,7 @@ class VisualizationTool():
                 "type": "action_2",
                 "list_not_include": action_visual["action_2"]["list_tiles_not_include_treasure"],
                 "pos": action_visual["action_2"]["pos"],
-                "description": action_visual["action_1"]["description"],
+                "description": action_visual["action_2"]["description"],
                 "pirate_pos" : action_visual["pirate_pos"]
             })
         self.__actual_turn = 1
