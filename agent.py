@@ -17,7 +17,7 @@ class Agent():
         self.__pirate_pos = None
         self.turn_pirate_free_agent_know = turn_pirate_free
         self.__hint_list_init = []
-        self.__scan = []
+        self.__scan = [(0,0)]
         self.turn_teleport = 1
         self.first_turn_check_hint =[]
         for i in range(len(map)):
@@ -234,8 +234,7 @@ class Agent():
                     if game_map[x_][y_][-1] == 'T':
                         self.__is_win = True
         if self.__is_win != True:
-            self.__hint_list_true = list(
-                filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
+            self.__hint_list_true = list(filter(lambda x: x not in obtain_list and game_map[x[0]][x[1]][-1] != '0' and game_map[x[0]][x[1]][-1] != 'M' and game_map[x[0]][x[1]][-1] != 'P', self.__hint_list_true))
         self.__scan.clear()
         self.__scan = obtain_list
 
@@ -1201,79 +1200,6 @@ class Agent():
                             "is_win": self.is_win()
                         })
                         num_action_rest = num_action_rest-1
-
-                #     for i in range(len(direction)-1):
-                #         sum_of_direction = 1
-                #         if i+1 < len(direction):
-                #             if direction[i] == direction[i+1]:
-                #                 sum_of_direction += 1
-                #             else:
-                #                 if direction[i] == (1,0):
-                #                     dir_of_agent.append("south")
-                #                 if direction[i] == (-1,0):
-                #                     dir_of_agent.append("north")
-                #                 if direction[i] == (0,1):
-                #                     dir_of_agent.append("east")
-                #                 if direction[i] == (0,-1):
-                #                     dir_of_agent.append("west")
-                #                 if num_action_rest > 0 :
-                #                     if self.__pos == self.__virtual_treasure:
-                #                             self.stay_large_scan
-                #                             self.action_list.append(4)
-                #                             num_action_rest = num_action_rest-1
-                #                     else:
-                #                         if sum_of_direction<=2:
-                #                             steps = sum_of_direction
-                #                             # print(remain + sum_of_direction)
-                #                             self.__pos=way_to_treasure[remain + sum_of_direction-1]
-                #                             remain=remain+sum_of_direction
-
-                #                             self.small_scan(map)
-                #                             self.action_list.append(2)
-                #                             num_action_rest=num_action_rest-1
-                #                         else :
-                #                             steps = sum_of_direction
-                #                         
-                #                             self.__pos=way_to_treasure[remain + sum_of_direction-1]
-                #                             remain=remain+sum_of_direction
-                #                             self.action_list.append(3)
-                #                             num_action_rest=num_action_rest-1
-                #         else:
-                #                 if direction[i] == (1,0):
-                #                     dir_of_agent.append("south")
-                #                 if direction[i] == (-1,0):
-                #                     dir_of_agent.append("north")
-                #                 if direction[i] == (0,1):
-                #                     dir_of_agent.append("east")
-                #                 if direction[i] == (0,-1):
-                #                     dir_of_agent.append("west")
-                #                 if num_action_rest > 0 :
-                #                     if self.__pos == self.__virtual_treasure:
-                #                             self.stay_large_scan
-                #                             self.action_list.append(4)
-                #                             num_action_rest = num_action_rest-1
-                #                     else:
-                #                         if sum_of_direction<=2:
-                #                             steps = sum_of_direction
-                #                             self.__pos=way_to_treasure[remain + sum_of_direction-1]
-                #                             remain=remain+sum_of_direction
-                #                             self.small_scan(map)
-                #                             self.action_list.append(2)
-                #                             num_action_rest=num_action_rest-1
-                #                         else :
-                #                             steps = sum_of_direction
-                #                             self.__pos=way_to_treasure[remain + sum_of_direction-1]
-                #                             remain=remain+sum_of_direction
-                #                             self.action_list.append(3)
-                #                             num_action_rest=num_action_rest-1
-                #     if num_action_rest > 0:
-                #             self.stay_large_scan
-                #             self.action_list.append(4)
-                #             num_action_rest = num_action_rest-1
-                # if num_action_rest > 0 :
-                #     self.stay_large_scan
-                #     self.action_list.append(4)
-                #     num_action_rest=num_action_rest-1
             action_1 = action_infor.pop(0)
             action_2 = action_infor.pop(0)
             self.action_list.clear()
