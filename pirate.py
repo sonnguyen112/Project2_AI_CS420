@@ -12,26 +12,23 @@ class Pirate():
         self.__treasure = None
         self.__treasureRegion = 2
         self.__regions = region_num
-        self.__hint_dict = {
-            1: self.hint_1(),
-            # 2: self.hint_2(),
-            3: self.hint_3(),
-            # 4: self.hint_4(),
-            5: self.hint_5(),
-            6: self.hint_6(),
-            # 7: self.hint_7(),
-            8: self.hint_8(),
-            9: self.hint_9(),
-            # 10: self.hint_10(),
-            # 11: self.hint_11(),
-            # 12: self.hint_12(),
-            # 13: self.hint_13(),
-            # 14: self.hint_14(),
-            15: self.hint_15(),
-            # 16: self.hint_16(),
-
-            # Add code
-        }
+        self.__hint_id = [
+            1,
+            # 2,
+            3,
+            4,
+            5,
+            6,
+            # 7,
+            8,
+            9,
+            # 10,
+            11,
+            12,
+            13,
+            # 14,
+            15
+        ]
         self.__pos = self.__set_init_pos()
         self.__path_to_treasure = None
         self.__index_path = 0
@@ -180,13 +177,10 @@ class Pirate():
 
     def give_hint(self, turn):
         # Add code
-        if len(list(self.__hint_dict.items())) == 0:
-            return None
-        key, val = random.choice(list(self.__hint_dict.items()))
         if turn == 1:
-            while self.check_hint(val) == False:
-                key, val = random.choice(list(self.__hint_dict.items()))
-        return val
+            while self.check_hint(hint) == False:
+                hint = exec(f"hint_{random.choice(self.__hint_id)}()")
+        return hint
 
     def action(self, turn):
         # Add code for pirate do action
